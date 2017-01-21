@@ -1,9 +1,12 @@
 #pragma once
 
+#include "image.h"
+
 #include <cstdint>
 #include <vector>
 #include <array>
 #include <functional>
+#include <memory>
 
 class GameBase
 {
@@ -16,6 +19,8 @@ public:
 
     void drawPixel(uint32_t x, uint32_t y, uint32_t pixel);
     void drawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t pixel);
+
+    void drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransparent = false);
 
     unsigned getFrameWidth()
     {
@@ -35,4 +40,6 @@ private:
 
     uint64_t m_frameCounter = 0;
 
+    std::shared_ptr<Image> m_image;
+    std::shared_ptr<Image> m_bgImage;
 };

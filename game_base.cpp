@@ -6,8 +6,8 @@
 #include <assert.h>
 #include <cstdlib>
 #include <cmath>
+#include <algorithm>
 
-#include <mikmod.h>
 #include <unistd.h>
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
@@ -17,11 +17,11 @@ GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
 {
 }
 
-MODULE *module;
 
 void GameBase::init()
 {
-    PngImage img("../RetroGame/images/rgb_test.png");
+    m_image = std::make_shared<PngImage>("../retro-game/images/rgb_test.png");
+    m_bgImage = std::make_shared<PngImage>("../retro-game/images/wood_bg.png");
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 }
 
@@ -32,11 +32,52 @@ void GameBase::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)
     m_framebuffer[x + y*m_frameWidth] = pixel;
 }
 
-
-uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
+constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
 {
     return b | (g << 8) | (r << 16);
 }
+
+
+void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
+{
+
+    uint32_t purple = rgb(255,0,255);
+
+    while (start != end)
+    {
+        if (*start != purple)
+        {
+            *dest++ = *start++;
+        }
+        else
+        {
+            dest++;
+            start++;
+        }
+    }
+
+}
+
+
+void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransparent)
+{
+
+    auto copyFunctor =
+            makePurpleTransparent ?
+            [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
+            [](uint32_t* start, uint32_t* end, uint32_t* dest){ std::copy(start, end, dest); };
+
+    for (int line = 0; line < img.getHeight(); ++line)
+    {
+        copyFunctor(
+                &img.getData()[line * img.getWidth()],
+                &img.getData()[line * img.getWidth()] + img.getWidth(),
+                &m_framebuffer[(y + line) * m_frameWidth + x]);
+    }
+}
+
+
+
 
 const void* GameBase::draw()
 {
@@ -50,10 +91,17 @@ const void* GameBase::draw()
 
     for (size_t i = 0; i < 100; ++i)
     {
-        drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
+        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
         // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(255, 255, 255))
     }
 
+    drawImage(*m_bgImage, 0, 0);
+
+
+    auto sinValue = sin(m_frameCounter / 10.0) * 10;
+    auto cosValue = cos(m_frameCounter / 11.0) * 10;
+
+    drawImage(*m_image, 100 + sinValue, 100 + cosValue, true);
 
     ++m_frameCounter;
     return m_framebuffer.data();

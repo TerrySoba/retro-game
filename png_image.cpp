@@ -99,21 +99,37 @@ PngImage::PngImage(const std::string& filename)
         throw Exception(fmt::format("Only 8-bit images are supported, but given image has {} bits.", bitDepth));
     }
 
-    if (colorType != PNG_COLOR_TYPE_RGB)
+    if (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGBA)
     {
-        throw Exception(fmt::format("Only RGB images are supported, but given image has color type {}.", colorType));
+        throw Exception(fmt::format("Only RGB(A) images are supported, but given image has color type {}.", colorType));
     }
 
     m_imageData.resize(sizeof(uint32_t) * width * height);
 
-    for (int y = 0; y < height; ++y)
+    if (colorType & PNG_COLOR_MASK_ALPHA)
     {
-        for (int x = 0; x < width; ++x)
+        for (int y = 0; y < height; ++y)
         {
-            auto r = imageData[y * bytesPerRow + (3 * x) + 0];
-            auto g = imageData[y * bytesPerRow + (3 * x) + 1];
-            auto b = imageData[y * bytesPerRow + (3 * x) + 2];
-            m_imageData[y * width + x] = (r << 0) | (g << 8) | (b << 16);
+            for (int x = 0; x < width; ++x)
+            {
+                auto r = imageData[y * bytesPerRow + (4 * x) + 0];
+                auto g = imageData[y * bytesPerRow + (4 * x) + 1];
+                auto b = imageData[y * bytesPerRow + (4 * x) + 2];
+                m_imageData[y * width + x] = (r << 16) | (g << 8) | (b << 0);
+            }
+        }
+    }
+    else
+    {
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                auto r = imageData[y * bytesPerRow + (3 * x) + 0];
+                auto g = imageData[y * bytesPerRow + (3 * x) + 1];
+                auto b = imageData[y * bytesPerRow + (3 * x) + 2];
+                m_imageData[y * width + x] = (r << 16) | (g << 8) | (b << 0);
+            }
         }
     }
 
