@@ -28,8 +28,6 @@ TEST_CASE("Intersection is Commutative")
     REQUIRE(inter1.getTopLeft().y == inter2.getTopLeft().y);
 }
 
-
-
 TEST_CASE("Intersection tests")
 {
     Rectangle r1(0, 0, 100, 100);
@@ -84,6 +82,15 @@ TEST_CASE("Intersection tests")
         REQUIRE(inter.getTopLeft().x == 0);
         REQUIRE(inter.getTopLeft().y == 10);
     }
+}
 
+
+TEST_CASE("Check rectangle normalization")
+{
+    Rectangle r1(0, 0, -13, -17);
+    REQUIRE(r1.getWidth() == 13);
+    REQUIRE(r1.getHeight() == 17);
+    REQUIRE(r1.getTopLeft().x == -13);
+    REQUIRE(r1.getTopLeft().y == -17);
 }
 
