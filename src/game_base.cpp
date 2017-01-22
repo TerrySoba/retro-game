@@ -1,12 +1,16 @@
 #include "game_base.h"
 
 #include "png_image.h"
+#include "rectangle.h"
+
+#include "fmt/format.h"
 
 #include <cstring>
 #include <assert.h>
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 #include <unistd.h>
 
@@ -61,18 +65,32 @@ void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 
 void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransparent)
 {
+    Rectangle screenRect(0, 0, m_frameWidth, m_frameHeight);
 
-    auto copyFunctor =
-            makePurpleTransparent ?
-            [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
-            [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
+    // check if image is visible at all
+    Rectangle imgRect(x, y, img.getWidth(), img.getHeight());
+    auto inter = screenRect.intersection(imgRect);
 
-    for (int line = 0; line < img.getHeight(); ++line)
+    // only draw img if it is completely visible
+    bool visible = (inter.getWidth() > 0 &&
+                    inter.getHeight() > 0 &&
+                    inter.getWidth() == img.getWidth() &&
+                    inter.getHeight() == img.getHeight());
+
+    if (visible)
     {
-        copyFunctor(
-                &img.getData()[line * img.getWidth()],
-                &img.getData()[line * img.getWidth()] + img.getWidth(),
-                &m_framebuffer[(y + line) * m_frameWidth + x]);
+        auto copyFunctor =
+                makePurpleTransparent ?
+                [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
+                [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
+
+        for (int line = 0; line < img.getHeight(); ++line)
+        {
+            copyFunctor(
+                    &img.getData()[line * img.getWidth()],
+                    &img.getData()[line * img.getWidth()] + img.getWidth(),
+                    &m_framebuffer[(y + line) * m_frameWidth + x]);
+        }
     }
 }
 
@@ -101,7 +119,7 @@ const void* GameBase::draw()
     auto sinValue = sin(m_frameCounter / 10.0) * 10;
     auto cosValue = cos(m_frameCounter / 11.0) * 10;
 
-    drawImage(*m_image, 100 + sinValue, 100 + cosValue, true);
+    drawImage(*m_image, 100 + sinValue, 100 + cosValue + m_frameCounter, true);
 
     ++m_frameCounter;
     return m_framebuffer.data();

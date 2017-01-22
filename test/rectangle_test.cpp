@@ -94,3 +94,16 @@ TEST_CASE("Check rectangle normalization")
     REQUIRE(r1.getTopLeft().y == -17);
 }
 
+TEST_CASE("equal rectangles")
+{
+    Rectangle r1(0, 0, 100, 100);
+    Rectangle r2(0, 0, 100, 100);
+
+    auto inter = r1.intersection(r2);
+
+    REQUIRE(inter.getWidth() == r1.getWidth());
+    REQUIRE(inter.getHeight() == r1.getHeight());
+    REQUIRE(inter.getTopLeft().x == r1.getTopLeft().x);
+    REQUIRE(inter.getTopLeft().y == r1.getTopLeft().y);
+}
+

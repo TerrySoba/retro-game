@@ -126,18 +126,13 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
     environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixel_format);
 }
 
-
-// Reset the Vectrex
 void retro_reset(void) { }
-
-// uint32_t s_framebuffer[320*200];
 
 static int offset = 0;
 static uint64_t audioFrame = 0;
 
 
-
-// Run a single frames with out Vectrex emulation.
+// Run a single frame
 void retro_run(void)
 {
     /*
