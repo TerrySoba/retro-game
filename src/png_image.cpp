@@ -91,45 +91,29 @@ PngImage::PngImage(const std::string& filename)
 
     png_read_image(png_ptr, rowPointers.data());
 
-
-    /// now convert to target image format XRGB
-
     if (bitDepth != 8)
     {
-        throw Exception(fmt::format("Only 8-bit images are supported, but given image has {} bits.", bitDepth));
+        throw Exception(fmt::format("Only 8-bit (per channel) images are supported, but given image has {} bits.", bitDepth));
     }
 
     if (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGBA)
     {
-        throw Exception(fmt::format("Only RGB(A) images are supported, but given image has color type {}.", colorType));
+        throw Exception(fmt::format("Only RGB and RGBA images are supported, but given image has color type {}.", colorType));
     }
 
     m_imageData.resize(sizeof(uint32_t) * width * height);
 
-    if (colorType & PNG_COLOR_MASK_ALPHA)
+    size_t bytesPerPixel = (colorType & PNG_COLOR_MASK_ALPHA)?4:3;
+
+    /// now convert to target image format XRGB
+    for (int y = 0; y < height; ++y)
     {
-        for (int y = 0; y < height; ++y)
+        for (int x = 0; x < width; ++x)
         {
-            for (int x = 0; x < width; ++x)
-            {
-                auto r = imageData[y * bytesPerRow + (4 * x) + 0];
-                auto g = imageData[y * bytesPerRow + (4 * x) + 1];
-                auto b = imageData[y * bytesPerRow + (4 * x) + 2];
-                m_imageData[y * width + x] = (r << 16) | (g << 8) | (b << 0);
-            }
-        }
-    }
-    else
-    {
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                auto r = imageData[y * bytesPerRow + (3 * x) + 0];
-                auto g = imageData[y * bytesPerRow + (3 * x) + 1];
-                auto b = imageData[y * bytesPerRow + (3 * x) + 2];
-                m_imageData[y * width + x] = (r << 16) | (g << 8) | (b << 0);
-            }
+            auto r = imageData[y * bytesPerRow + (bytesPerPixel * x) + 0];
+            auto g = imageData[y * bytesPerRow + (bytesPerPixel * x) + 1];
+            auto b = imageData[y * bytesPerRow + (bytesPerPixel * x) + 2];
+            m_imageData[y * width + x] = (r << 16) | (g << 8) | (b << 0);
         }
     }
 
