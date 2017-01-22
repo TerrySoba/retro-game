@@ -45,7 +45,7 @@ constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
 void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 {
 
-    uint32_t purple = rgb(255,0,255);
+    const uint32_t purple = rgb(255,0,255);
 
     while (start != end)
     {
@@ -119,19 +119,25 @@ const void* GameBase::draw()
 
     // drawPixel(m_frameCounter % m_frameWidth, 100, rgb(255, 255, 255));
 
-    for (size_t i = 0; i < 100; ++i)
-    {
-        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
-        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(255, 255, 255))
-    }
+//    for (size_t i = 0; i < 100; ++i)
+//    {
+//        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
+//        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(255, 255, 255))
+//    }
 
     drawImage(*m_bgImage, 0, 0, false);
 
+    for (size_t i = 0; i < 10; ++i)
+    {
+        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
+        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(0,0,0));
+    }
 
-    auto sinValue = sin(m_frameCounter / 10.0) * 10;
-    auto cosValue = cos(m_frameCounter / 11.0) * 10;
 
-    drawImage(*m_image, 100 + sinValue + m_frameCounter, 100 + cosValue , true);
+    auto sinValue = sin(m_frameCounter / 10.0) * 140;
+    auto cosValue = cos(m_frameCounter / 11.0) * 130;
+
+    drawImage(*m_image, 100 + sinValue, 100 + cosValue , true);
 
     ++m_frameCounter;
     return m_framebuffer.data();
