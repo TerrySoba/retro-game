@@ -8,3 +8,7 @@ Rectangle::Rectangle(int32_t x, int32_t y, int32_t width, int32_t height) :
 {
 }
 
+Rectangle Rectangle::intersection(const Rectangle& other) const
+{
+    return Rectangle(1,2,3,4);
+}

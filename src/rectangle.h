@@ -48,6 +48,9 @@ public:
         return p;
     }
 
+    Rectangle intersection(const Rectangle& other) const;
+
+
 private:
     int32_t m_x;
     int32_t m_y;
