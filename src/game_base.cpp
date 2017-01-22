@@ -71,11 +71,9 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
     Rectangle imgRect(x, y, img.getWidth(), img.getHeight());
     auto inter = screenRect.intersection(imgRect);
 
-    // only draw img if it is completely visible
+    // only draw img if it is visible
     bool visible = (inter.getWidth() > 0 &&
-                    inter.getHeight() > 0 &&
-                    inter.getWidth() == img.getWidth() &&
-                    inter.getHeight() == img.getHeight());
+                    inter.getHeight() > 0);
 
     if (visible)
     {
@@ -84,12 +82,26 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
                 [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
                 [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
 
-        for (int line = 0; line < img.getHeight(); ++line)
+        auto tl = inter.getTopLeft();
+
+        auto xOffScreen = tl.x;
+        auto yOffScreen = tl.y;
+
+        auto xOffImg = tl.x - x;
+        auto yOffImg = tl.y - y;
+
+        auto imgData = img.getData();
+
+        auto drawWidth = inter.getWidth();
+
+        auto imgWidth = img.getWidth();
+
+        for (int line = 0; line < inter.getHeight(); ++line)
         {
             copyFunctor(
-                    &img.getData()[line * img.getWidth()],
-                    &img.getData()[line * img.getWidth()] + img.getWidth(),
-                    &m_framebuffer[(y + line) * m_frameWidth + x]);
+                    &imgData[(line + yOffImg) * imgWidth + xOffImg],
+                    &imgData[(line + yOffImg) * imgWidth + xOffImg + drawWidth],
+                    &m_framebuffer[(yOffScreen + line) * m_frameWidth + xOffScreen]);
         }
     }
 }
@@ -119,7 +131,7 @@ const void* GameBase::draw()
     auto sinValue = sin(m_frameCounter / 10.0) * 10;
     auto cosValue = cos(m_frameCounter / 11.0) * 10;
 
-    drawImage(*m_image, 100 + sinValue, 100 + cosValue + m_frameCounter, true);
+    drawImage(*m_image, 100 + sinValue + m_frameCounter, 100 + cosValue , true);
 
     ++m_frameCounter;
     return m_framebuffer.data();
