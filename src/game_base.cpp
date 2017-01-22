@@ -65,7 +65,7 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
     auto copyFunctor =
             makePurpleTransparent ?
             [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
-            [](uint32_t* start, uint32_t* end, uint32_t* dest){ std::copy(start, end, dest); };
+            [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
 
     for (int line = 0; line < img.getHeight(); ++line)
     {
@@ -95,7 +95,7 @@ const void* GameBase::draw()
         // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(255, 255, 255))
     }
 
-    drawImage(*m_bgImage, 0, 0);
+    drawImage(*m_bgImage, 0, 0, false);
 
 
     auto sinValue = sin(m_frameCounter / 10.0) * 10;
