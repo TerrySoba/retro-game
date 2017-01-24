@@ -8,6 +8,14 @@
 #include <functional>
 #include <memory>
 
+struct GameInput
+{
+    bool left;
+    bool right;
+    bool up;
+    bool down;
+};
+
 class GameBase
 {
 public:
@@ -15,7 +23,7 @@ public:
     virtual ~GameBase() {}
 
     void init();
-    const void* draw();
+    const void* run(GameInput input);
 
     void drawPixel(uint32_t x, uint32_t y, uint32_t pixel);
     void drawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t pixel);
@@ -42,4 +50,8 @@ private:
 
     std::shared_ptr<Image> m_image;
     std::shared_ptr<Image> m_bgImage;
+
+    int32_t m_posX = 100;
+    int32_t m_posY = 100;
+
 };

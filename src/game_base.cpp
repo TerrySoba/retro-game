@@ -109,7 +109,7 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
 
 
 
-const void* GameBase::draw()
+const void* GameBase::run(GameInput input)
 {
 
 //    for (uint64_t i = 0; i < m_frameWidth * m_frameHeight; ++i)
@@ -134,10 +134,17 @@ const void* GameBase::draw()
     }
 
 
-    auto sinValue = sin(m_frameCounter / 10.0) * 140;
-    auto cosValue = cos(m_frameCounter / 11.0) * 130;
+    // auto sinValue = sin(m_frameCounter / 10.0) * 40;
+    // auto cosValue = cos(m_frameCounter / 11.12133524) * 30;
 
-    drawImage(*m_image, 100 + sinValue, 100 + cosValue , true);
+    // drawImage(*m_image, 100 + sinValue, 100 + cosValue , true);
+
+    if (input.left) m_posX--;
+    if (input.right) m_posX++;
+    if (input.down) m_posY++;
+    if (input.up) m_posY--;
+
+    drawImage(*m_image, m_posX, m_posY, true);
 
     ++m_frameCounter;
     return m_framebuffer.data();

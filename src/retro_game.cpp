@@ -4,6 +4,7 @@
 #include <memory>
 #include <cmath>
 #include <limits>
+#include <iostream>
 
 #include "libretro/libretro.h"
 #include "game_base.h"
@@ -151,10 +152,23 @@ void retro_run(void)
 
 //    offset+=320 * 200;
 
-    retro_input_poll_t input;
+    // retro_input_poll_t input;
     input_poll_cb();
 
-    auto frameBuffer = s_game->draw();
+    // RETRO_DEVICE_JOYPAD
+    // unsigned port, unsigned device, unsigned index, unsigned id
+
+    GameInput input;
+
+    input.right = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT);
+    input.left = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT);
+    input.up = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP);
+    input.down = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN);
+
+    // std::cout << "data: " << data << std::endl;
+
+
+    auto frameBuffer = s_game->run(input);
 
     video_cb(frameBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, sizeof(uint32_t) * FRAMEBUFFER_WIDTH);
 }
