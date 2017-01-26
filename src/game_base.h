@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image.h"
+#include "animation.h"
 
 #include <cstdint>
 #include <vector>
@@ -50,6 +51,8 @@ private:
 
     std::shared_ptr<Image> m_image;
     std::shared_ptr<Image> m_bgImage;
+    std::shared_ptr<Animation> m_anim;
+
 
     int32_t m_posX = 100;
     int32_t m_posY = 100;

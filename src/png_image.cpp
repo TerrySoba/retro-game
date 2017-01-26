@@ -17,15 +17,15 @@ PngImage::PngImage(const std::string& filename)
     uint8_t header[8];    // 8 is the maximum size that can be checked
 
     /* open file and test for it being a png */
-    FILE *fp = fopen(filename.c_str(), "rb");
+    FILE *fp = fopen(filename.c_str(), "rb");    
     BOOST_SCOPE_EXIT_ALL(&)
     {
         fclose(fp);
     };
 
-    if (!fp)
+    if (fp == NULL)
     {
-        throw Exception(fmt::format("Could not open file \"{}\".",  filename));
+        throw Exception(fmt::format("Could not open file \"{}\". errno: {}",  filename, errno));
     }
 
     fread(header, 1, 8, fp);

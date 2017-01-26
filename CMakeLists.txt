@@ -18,6 +18,7 @@ add_library(${PROJECT_NAME} SHARED
     src/exception.cpp
     src/rectangle.h
     src/rectangle.cpp
+    src/animation.h
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)

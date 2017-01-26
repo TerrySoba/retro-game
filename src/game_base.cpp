@@ -4,6 +4,7 @@
 #include "rectangle.h"
 
 #include "fmt/format.h"
+#include "exception.h"
 
 #include <cstring>
 #include <assert.h>
@@ -13,6 +14,8 @@
 #include <iostream>
 
 #include <unistd.h>
+
+
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
     m_frameWidth(frameWidth),
@@ -26,6 +29,7 @@ void GameBase::init()
 {
     m_image = std::make_shared<PngImage>("../retro-game/images/rgb_test.png");
     m_bgImage = std::make_shared<PngImage>("../retro-game/images/wood_bg.png");
+    m_anim = std::make_shared<Animation>("../retro-game/gfx/space_ship/animation_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 }
 
@@ -143,8 +147,9 @@ const void* GameBase::run(GameInput input)
     if (input.right) m_posX++;
     if (input.down) m_posY++;
     if (input.up) m_posY--;
+    m_anim->setFrame(m_frameCounter);
 
-    drawImage(*m_image, m_posX, m_posY, true);
+    drawImage(*m_anim, m_posX, m_posY, true);
 
     ++m_frameCounter;
     return m_framebuffer.data();
