@@ -34,7 +34,7 @@ void GameBase::init()
     m_anim = std::make_shared<Animation>("../retro-game/gfx/space_ship/animation_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
-    m_sound->playModule("/home/yoshi252/mod_music/nes_samples/NES_Example_Bigger_Than_8_Bit.xm");
+    m_sound->playModule("../retro-game/music/test_music.xm");
 
 }
 
