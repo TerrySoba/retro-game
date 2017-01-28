@@ -1,85 +1,80 @@
 #include "mikmod_sound.h"
-
 #include "mikmod_driver/drv_retro_game.h"
+
+#include "exception.h"
+#include "fmt/format.h"
 
 #include <mikmod.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <iostream>
 
 
 MikmodSound::MikmodSound()
 {
-
-}
-
-
-void MikmodSound::initMikmod()
-{
-    MODULE *module;
-
-    /* register all the drivers */
-    // MikMod_RegisterAllDrivers();
-
+    // register our own special driver
     MikMod_RegisterDriver(&drv_retrogame);
-
 
     /* register all the module loaders */
     MikMod_RegisterAllLoaders();
 
-    /* initialize the library */
+    // set some settings of mikmod
     md_mode = DMODE_SOFT_MUSIC | DMODE_16BITS | DMODE_STEREO | DMODE_HQMIXER | DMODE_INTERP;
     md_mixfreq = 44100;
     md_reverb = 5;
 
-    // std::cout << MikMod_InfoDriver() << std::endl;
-
+    /* initialize the library */
     if (MikMod_Init("")) {
-        fprintf(stderr, "Could not initialize sound, reason: %s\n",
-                MikMod_strerror(MikMod_errno));
-        return;
+        throw Exception(fmt::format("Could not initialize sound, reason: {}\n", MikMod_strerror(MikMod_errno)));
+    }
+}
+
+MikmodSound::~MikmodSound()
+{
+    if (m_module)
+    {
+        Player_Stop();
+        Player_Free(m_module);
+    }
+    MikMod_Exit();
+}
+
+void MikmodSound::playModule(const std::string filename)
+{
+    // stop playback and free module if one is already running
+    if (m_module)
+    {
+        Player_Stop();
+        Player_Free(m_module);
     }
 
     /* load module */
-    module = Player_Load("/home/yoshi252/Downloads/external.xm", 64, 0);
-    if (module) {
-        /* start module */
-        Player_Start(module);
+    m_module = Player_Load(filename.c_str(), 64, false);
 
+    if (!m_module)
+    {
+        throw Exception(fmt::format("Could not load module, reason: {}\n", MikMod_strerror(MikMod_errno)));
     }
-//        while (Player_Active()) {
-//            /* we're playing */
-//            usleep(10000);
-//            MikMod_Update();
-//        }
 
-//        Player_Stop();
-//        Player_Free(module);
-//    } else
-//        fprintf(stderr, "Could not load module, reason: %s\n",
-//                MikMod_strerror(MikMod_errno));
+    m_module->loop = true;
+    m_module->wrap = true;
 
-//    /* give up */
-//    MikMod_Exit();
+    /* start module */
+    Player_Start(m_module);
+
 }
 
-void MikmodSound::update()
+void MikmodSound::renderAudioFrames(size_t frames, void* dest)
 {
+    auto requestedBytes = frames * 4;
+    retro_bufferSize = requestedBytes;
+    retro_bufferContentLength = 0;
     MikMod_Update();
-}
 
-
-uint32_t& MikmodSound::getBufferSize()
-{
-    return retro_bufferPos;
-}
-
-int16_t* MikmodSound::getBuffer()
-{
-    return reinterpret_cast<int16_t*>(retro_audioBuffer);
-}
-
-void renderAudioFrames(size_t frames, void* dest)
-{
-
+    if (retro_bufferContentLength != requestedBytes)
+    {
+        memset((char*)dest + retro_bufferContentLength, 0, requestedBytes - retro_bufferContentLength);
+    }
+    memcpy(dest, retro_audioBuffer, retro_bufferContentLength);
 }

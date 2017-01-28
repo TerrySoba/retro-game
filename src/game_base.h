@@ -62,5 +62,6 @@ private:
     int32_t m_posY = 100;
 
     std::shared_ptr<MikmodSound> m_sound;
+    std::vector<char> m_audioBuffer;
 
 };

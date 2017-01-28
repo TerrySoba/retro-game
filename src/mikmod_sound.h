@@ -4,16 +4,18 @@
 #include <cstdint>
 #include <cstdlib>
 
+#include <string>
+
+// forward declaration
+struct MODULE;
+
 class MikmodSound
 {
 public:
     MikmodSound();
+    ~MikmodSound();
 
-    void initMikmod();
-    void update();
-
-    uint32_t& getBufferSize();
-    int16_t* getBuffer();
+    void playModule(const std::string filename);
 
     /**
      * Renders the given number of audioframes to the destination buffer.
@@ -26,6 +28,9 @@ public:
      * @param dest The buffer to render the audio frames to.
      */
     void renderAudioFrames(size_t frames, void* dest);
+
+private:
+    MODULE* m_module = nullptr;
 
 };
 

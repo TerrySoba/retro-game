@@ -4,10 +4,11 @@
 #include <mikmod.h>
 
 #include <stdint.h>
+#include <stdlib.h>
 
 extern uint8_t* retro_audioBuffer;
-extern uint32_t retro_bufferPos;
-extern uint32_t retro_bufferSize;
+extern size_t retro_bufferSize;
+extern uint32_t retro_bufferContentLength;
 
 extern MDRIVER drv_retrogame;
 

@@ -1,20 +1,24 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <mikmod.h>
+#include <string.h>
+#include <stdio.h>
+
 
 static BOOL retro_IsThere(void)
 {  
 	return 1;
 }
 
-#define RETRO_AUDIO_BUFFER_SIZE 735 * 4
+#define RETRO_AUDIO_BUFFER_SIZE (735 * 4) * 5
 uint8_t* retro_audioBuffer = NULL;
-uint32_t retro_bufferPos = 0;
+uint32_t retro_bufferSize = 0;
+uint32_t retro_bufferContentLength = 0;
 
 static BOOL retro_Init(void)
 {
     retro_audioBuffer = (SBYTE*)malloc(sizeof(SBYTE) * RETRO_AUDIO_BUFFER_SIZE);
-    retro_bufferPos = 0;
+    // retro_bufferPos = 0;
     return VC_Init();
 }
 
@@ -26,11 +30,7 @@ static void retro_Exit(void)
 
 static void retro_Update(void)
 {
-    if (retro_bufferPos < RETRO_AUDIO_BUFFER_SIZE)
-    {
-        ULONG length = VC_WriteBytes(retro_audioBuffer + retro_bufferPos, RETRO_AUDIO_BUFFER_SIZE - retro_bufferPos);
-        retro_bufferPos += length;
-    }
+    retro_bufferContentLength = VC_WriteBytes(retro_audioBuffer, retro_bufferSize);
 }
 
 static BOOL retro_Reset(void)

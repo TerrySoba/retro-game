@@ -17,48 +17,13 @@
 
 #include <unistd.h>
 
-std::vector<int16_t> buffer(735 * 4);
-
-
-union Swapper
-{
-    int16_t value;
-    int8_t bytes[2];
-};
-
-int16_t byteSwap(int16_t value)
-{
-    Swapper s;
-    s.value = value;
-
-    auto tmp = s.bytes[0];
-    s.bytes[0] = s.bytes[1];
-    s.bytes[1] = tmp;
-
-    return s.value;
-}
-
-
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
     m_frameWidth(frameWidth),
     m_frameHeight(frameHeight),
     m_framebuffer(frameWidth * frameHeight),
-    m_sound(new MikmodSound)
+    m_sound(new MikmodSound),
+    m_audioBuffer(735 * 4) // 44100 / 60 == 735 , one audio frame == 4 bytes
 {
-    float f = 0;
-    int i = 0;
-    for(auto& it : buffer)
-    {
-        i++;
-        it = sin(f) * 30000 + 30000;
-
-        // it = byteSwap(it);
-
-        f += .01;
-
-        if (i&1) it = 0;
-
-    }
 }
 
 
@@ -69,7 +34,7 @@ void GameBase::init()
     m_anim = std::make_shared<Animation>("../retro-game/gfx/space_ship/animation_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
-    m_sound->initMikmod();
+    m_sound->playModule("/home/yoshi252/mod_music/nes_samples/NES_Example_Bigger_Than_8_Bit.xm");
 
 }
 
@@ -150,42 +115,9 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
     }
 }
 
-
-
-
 const void* GameBase::run(GameInput input)
 {
-
-//    for (uint64_t i = 0; i < m_frameWidth * m_frameHeight; ++i)
-//    {
-//        m_framebuffer[i] = i + m_frameCounter;
-//    }
-
-    // drawPixel(m_frameCounter % m_frameWidth, 100, rgb(255, 255, 255));
-
-//    for (size_t i = 0; i < 100; ++i)
-//    {
-//        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
-//        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(255, 255, 255))
-//    }
-
     drawImage(*m_bgImage, 0, 0, false);
-
-    for (size_t i = 0; i < 10; ++i)
-    {
-        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(rand() % 256, rand() % 256, rand() % 256));
-        // drawPixel(rand() % m_frameWidth, rand() % m_frameHeight, rgb(0,0,0));
-    }
-
-
-    // auto sinValue = sin(m_frameCounter / 10.0) * 40;
-    // auto cosValue = cos(m_frameCounter / 11.12133524) * 30;
-
-    // drawImage(*m_image, 100 + sinValue, 100 + cosValue , true);
-
-    // if (m_frameCounter % 32 == 0)
-    m_sound->update();
-
 
     if (input.left) m_posX--;
     if (input.right) m_posX++;
@@ -199,19 +131,8 @@ const void* GameBase::run(GameInput input)
     return m_framebuffer.data();
 }
 
-
-
-
 void GameBase::audio(std::function<size_t(const int16_t*,size_t)> batchAudioCallback)
 {
-    // batchAudioCallback(buffer.data(), 735);
-
-    auto frames = batchAudioCallback((int16_t*)retro_audioBuffer, std::min<size_t>(735, (size_t)(retro_bufferPos / 4)));
-
-    memmove(retro_audioBuffer, retro_audioBuffer + (frames * 2), retro_bufferPos - frames*4);
-    retro_bufferPos -= frames * 4;
-
-    // std::cout << fmt::format("Buffer: {}  read: {}", retro_bufferPos, frames) << std::endl;
-
-    // size = 0;
+    m_sound->renderAudioFrames(735, m_audioBuffer.data());
+    batchAudioCallback((int16_t*)m_audioBuffer.data(), 735);
 }

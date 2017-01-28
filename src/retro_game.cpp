@@ -129,45 +129,12 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
 
 void retro_reset(void) { }
 
-static int offset = 0;
-static uint64_t audioFrame = 0;
 
 // Run a single frame
 void retro_run(void)
 {
-    /*
-    for (int i = 0; i < (44100 / 60); i++)
-    {
-        audioFrame++;
-        uint16_t sine = (sin(audioFrame / 100) + 1) * std::numeric_limits<uint16_t>::max() * 0.1;
-        audio_cb(sine, sine);
-    }
-    */
-
-//    for (int i = 0; i < 320 * 200; ++i)
-//    {
-//        framebuffer[i] = i + offset;
-//    }
-
-//    offset+=320 * 200;
-
     s_game->audio([&](const int16_t *data, size_t frames)
     {
-//        for (size_t i = 0; i < frames; ++i)
-//        {
-//            // audioFrame++;
-
-
-
-//            // audio_cb(*(data + 2*i), *(data + 2*i + 1));
-
-//            // int16_t sample = sin(audioFrame / 100.0) * 30000;
-
-//            // sample = (sample>>8) | (sample<<8);
-
-//            // audio_cb(sample, sample);
-
-//        }
         return audio_batch_cb(data, frames);
     });
 
@@ -183,9 +150,6 @@ void retro_run(void)
     input.left = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT);
     input.up = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP);
     input.down = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN);
-
-    // std::cout << "data: " << data << std::endl;
-
 
     auto frameBuffer = s_game->run(input);
 
