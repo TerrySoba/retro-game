@@ -19,6 +19,10 @@ add_library(${PROJECT_NAME} SHARED
     src/rectangle.h
     src/rectangle.cpp
     src/animation.h
+    src/mikmod_driver/drv_retro_game.c
+    src/mikmod_driver/drv_retro_game.h
+    src/mikmod_sound.cpp
+    src/mikmod_sound.h
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)
@@ -26,10 +30,15 @@ add_library(${PROJECT_NAME} SHARED
 INCLUDE_DIRECTORIES(
     ${PNG_INCLUDE_DIRS}
     3rd_party
-    src)
+    src
+    #/home/yoshi252/program_sources/libmikmod-3.3.10-install/include)
+    )
 
 target_link_libraries(${PROJECT_NAME}
-    ${PNG_LIBRARIES})
+    ${PNG_LIBRARIES}
+    mikmod
+    #/home/yoshi252/program_sources/libmikmod-3.3.10-install/lib/libmikmod.so.3.3.0)
+    )
 
 
 add_executable(${PROJECT_NAME}_testsuite

@@ -17,6 +17,9 @@ struct GameInput
     bool down;
 };
 
+// forward declaration
+class MikmodSound;
+
 class GameBase
 {
 public:
@@ -25,6 +28,7 @@ public:
 
     void init();
     const void* run(GameInput input);
+    void audio(std::function<size_t(const int16_t*,size_t)> batchAudioCallback);
 
     void drawPixel(uint32_t x, uint32_t y, uint32_t pixel);
     void drawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t pixel);
@@ -56,5 +60,7 @@ private:
 
     int32_t m_posX = 100;
     int32_t m_posY = 100;
+
+    std::shared_ptr<MikmodSound> m_sound;
 
 };

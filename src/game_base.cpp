@@ -2,6 +2,8 @@
 
 #include "png_image.h"
 #include "rectangle.h"
+#include "mikmod_sound.h"
+#include "mikmod_driver/drv_retro_game.h"
 
 #include "fmt/format.h"
 #include "exception.h"
@@ -15,13 +17,48 @@
 
 #include <unistd.h>
 
+std::vector<int16_t> buffer(735 * 4);
+
+
+union Swapper
+{
+    int16_t value;
+    int8_t bytes[2];
+};
+
+int16_t byteSwap(int16_t value)
+{
+    Swapper s;
+    s.value = value;
+
+    auto tmp = s.bytes[0];
+    s.bytes[0] = s.bytes[1];
+    s.bytes[1] = tmp;
+
+    return s.value;
+}
 
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
     m_frameWidth(frameWidth),
     m_frameHeight(frameHeight),
-    m_framebuffer(frameWidth * frameHeight)
+    m_framebuffer(frameWidth * frameHeight),
+    m_sound(new MikmodSound)
 {
+    float f = 0;
+    int i = 0;
+    for(auto& it : buffer)
+    {
+        i++;
+        it = sin(f) * 30000 + 30000;
+
+        // it = byteSwap(it);
+
+        f += .01;
+
+        if (i&1) it = 0;
+
+    }
 }
 
 
@@ -31,6 +68,9 @@ void GameBase::init()
     m_bgImage = std::make_shared<PngImage>("../retro-game/images/wood_bg.png");
     m_anim = std::make_shared<Animation>("../retro-game/gfx/space_ship/animation_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
+
+    m_sound->initMikmod();
+
 }
 
 void GameBase::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)
@@ -143,6 +183,10 @@ const void* GameBase::run(GameInput input)
 
     // drawImage(*m_image, 100 + sinValue, 100 + cosValue , true);
 
+    // if (m_frameCounter % 32 == 0)
+    m_sound->update();
+
+
     if (input.left) m_posX--;
     if (input.right) m_posX++;
     if (input.down) m_posY++;
@@ -153,4 +197,21 @@ const void* GameBase::run(GameInput input)
 
     ++m_frameCounter;
     return m_framebuffer.data();
+}
+
+
+
+
+void GameBase::audio(std::function<size_t(const int16_t*,size_t)> batchAudioCallback)
+{
+    // batchAudioCallback(buffer.data(), 735);
+
+    auto frames = batchAudioCallback((int16_t*)retro_audioBuffer, std::min<size_t>(735, (size_t)(retro_bufferPos / 4)));
+
+    memmove(retro_audioBuffer, retro_audioBuffer + (frames * 2), retro_bufferPos - frames*4);
+    retro_bufferPos -= frames * 4;
+
+    // std::cout << fmt::format("Buffer: {}  read: {}", retro_bufferPos, frames) << std::endl;
+
+    // size = 0;
 }

@@ -132,7 +132,6 @@ void retro_reset(void) { }
 static int offset = 0;
 static uint64_t audioFrame = 0;
 
-
 // Run a single frame
 void retro_run(void)
 {
@@ -151,6 +150,26 @@ void retro_run(void)
 //    }
 
 //    offset+=320 * 200;
+
+    s_game->audio([&](const int16_t *data, size_t frames)
+    {
+//        for (size_t i = 0; i < frames; ++i)
+//        {
+//            // audioFrame++;
+
+
+
+//            // audio_cb(*(data + 2*i), *(data + 2*i + 1));
+
+//            // int16_t sample = sin(audioFrame / 100.0) * 30000;
+
+//            // sample = (sample>>8) | (sample<<8);
+
+//            // audio_cb(sample, sample);
+
+//        }
+        return audio_batch_cb(data, frames);
+    });
 
     // retro_input_poll_t input;
     input_poll_cb();
