@@ -37,6 +37,7 @@ INCLUDE_DIRECTORIES(
 target_link_libraries(${PROJECT_NAME}
     ${PNG_LIBRARIES}
     mikmod
+    physfs
     #/home/yoshi252/program_sources/libmikmod-3.3.10-install/lib/libmikmod.so.3.3.0)
     )
 
