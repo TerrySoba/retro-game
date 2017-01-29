@@ -18,7 +18,6 @@ public:
         for (uint32_t i = start; i <= stop; ++i)
         {
             auto path = fmt::format("{}{:04}.png", directory, i);
-            std::cout << path << std::endl;
             m_images.emplace_back(path);
         }
 

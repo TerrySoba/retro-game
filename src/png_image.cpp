@@ -5,7 +5,6 @@
 
 #include "fmt/format.h"
 
-
 #include "boost/scope_exit.hpp"
 
 #include <cstdio>
@@ -17,7 +16,8 @@ PngImage::PngImage(const std::string& filename)
     uint8_t header[8];    // 8 is the maximum size that can be checked
 
     /* open file and test for it being a png */
-    FILE *fp = fopen(filename.c_str(), "rb");    
+    FILE *fp = fopen(filename.c_str(), "rb");
+
     BOOST_SCOPE_EXIT_ALL(&)
     {
         fclose(fp);
@@ -60,6 +60,7 @@ PngImage::PngImage(const std::string& filename)
     }
 
     png_init_io(png_ptr, fp);
+
     png_set_sig_bytes(png_ptr, 8);
 
     png_read_info(png_ptr, info_ptr);

@@ -57,6 +57,7 @@ bool retro_unserialize(const void *data, size_t size) { return false; }
 // End of retrolib
 void retro_deinit(void)
 {
+    s_game->deinit();
     s_game.reset();
 }
 

@@ -27,6 +27,7 @@ public:
     virtual ~GameBase() {}
 
     void init();
+    void deinit();
     const void* run(GameInput input);
     void audio(std::function<size_t(const int16_t*,size_t)> batchAudioCallback);
 

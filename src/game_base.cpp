@@ -29,12 +29,16 @@ GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
 
 void GameBase::init()
 {
-    m_image = std::make_shared<PngImage>("../retro-game/assets/images/rgb_test.png");
-    m_bgImage = std::make_shared<PngImage>("../retro-game/assets/images/wood_bg.png");
-    m_anim = std::make_shared<Animation>("../retro-game/assets/animations/space_ship_64x32/", 0, 250);
+    m_image = std::make_shared<PngImage>("assets/images/rgb_test.png");
+    m_bgImage = std::make_shared<PngImage>("assets/images/wood_bg.png");
+    m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
-    m_sound->playModule("../retro-game/assets/music/test_music.xm");
+    m_sound->playModule("assets/music/test_music.xm");
+}
+
+void GameBase::deinit()
+{
 }
 
 void GameBase::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)

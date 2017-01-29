@@ -6,6 +6,11 @@ set (CMAKE_CXX_STANDARD 14)
 
 find_package(PNG REQUIRED)
 
+
+add_custom_target(package_game_assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
+    )
+
 add_definitions(${PNG_DEFINITIONS})
 
 add_library(${PROJECT_NAME} SHARED
@@ -31,16 +36,12 @@ INCLUDE_DIRECTORIES(
     ${PNG_INCLUDE_DIRS}
     3rd_party
     src
-    #/home/yoshi252/program_sources/libmikmod-3.3.10-install/include)
     )
 
 target_link_libraries(${PROJECT_NAME}
     ${PNG_LIBRARIES}
     mikmod
-    physfs
-    #/home/yoshi252/program_sources/libmikmod-3.3.10-install/lib/libmikmod.so.3.3.0)
     )
-
 
 add_executable(${PROJECT_NAME}_testsuite
     3rd_party/catch/catch.hpp
@@ -49,3 +50,6 @@ add_executable(${PROJECT_NAME}_testsuite
 
 target_link_libraries(${PROJECT_NAME}_testsuite
     ${PROJECT_NAME})
+
+add_dependencies(${PROJECT_NAME}
+    package_game_assets)

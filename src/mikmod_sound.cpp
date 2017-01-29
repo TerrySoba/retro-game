@@ -40,6 +40,7 @@ MikmodSound::~MikmodSound()
     MikMod_Exit();
 }
 
+
 void MikmodSound::playModule(const std::string filename)
 {
     // stop playback and free module if one is already running
