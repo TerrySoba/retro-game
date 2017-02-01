@@ -6,9 +6,13 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 // forward declaration
 struct MODULE;
+struct SAMPLE;
+
+typedef size_t SampleId;
 
 class MikmodSound
 {
@@ -19,6 +23,9 @@ public:
     void playModule(const std::string filename);
 
     void togglePause();
+
+    SampleId loadSample(const std::string filename);
+    void playSample(SampleId sampleId);
 
     /**
      * Renders the given number of audioframes to the destination buffer.
@@ -34,7 +41,7 @@ public:
 
 private:
     std::shared_ptr<MODULE> m_module;
-
+    std::vector<std::shared_ptr<SAMPLE>> m_samples;
 };
 
 #endif // MIKMOD_SOUND_H

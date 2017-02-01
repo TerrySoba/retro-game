@@ -67,4 +67,6 @@ private:
     std::shared_ptr<MikmodSound> m_sound;
     std::vector<char> m_audioBuffer;
 
+
+    size_t m_sampleId;
 };

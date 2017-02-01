@@ -28,6 +28,11 @@ MikmodSound::MikmodSound()
     if (MikMod_Init("")) {
         throw Exception(fmt::format("Could not initialize sound, reason: {}\n", MikMod_strerror(MikMod_errno)));
     }
+
+    /* reserve 2 voices for sound effects */
+    MikMod_SetNumVoices(-1, 2);
+
+    MikMod_EnableOutput();
 }
 
 MikmodSound::~MikmodSound()
@@ -69,6 +74,32 @@ void MikmodSound::playModule(const std::string filename)
 void MikmodSound::togglePause()
 {
     Player_TogglePause();
+}
+
+SampleId MikmodSound::loadSample(const std::string filename)
+{
+    auto sample = Sample_Load(filename.c_str());
+    if (!sample)
+    {
+        throw Exception(fmt::format("Could not load sample, reason: {}\n", MikMod_strerror(MikMod_errno)));
+    }
+
+    m_samples.push_back(
+                std::shared_ptr<SAMPLE>(sample,
+                    [](auto* ptr) { Sample_Free(ptr); }));
+
+    return m_samples.size() - 1;
+}
+
+void MikmodSound::playSample(SampleId sampleId)
+{
+    if (m_samples.size() <= sampleId)
+    {
+        throw Exception(fmt::format("Could not play sample id: {}, there are only {} samples available.\n", sampleId, m_samples.size()));
+    }
+    auto voice = Sample_Play(m_samples[sampleId].get(), 0, 0);
+
+    Voice_SetPanning(voice, PAN_CENTER);
 }
 
 void MikmodSound::renderAudioFrames(size_t frames, void* dest)

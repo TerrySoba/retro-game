@@ -35,6 +35,9 @@ void GameBase::init()
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
     m_sound->playModule("assets/music/test_music.xm");
+
+    m_sampleId = m_sound->loadSample("assets/sounds/Per-Reverb.wav");
+
 }
 
 void GameBase::deinit()
@@ -121,7 +124,11 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
 const void* GameBase::run(GameInput input)
 {
 
-    if (input.button) m_sound->togglePause();
+    if (input.button)
+    {
+        m_sound->playSample(m_sampleId);
+    }
+        //m_sound->togglePause();
 
     drawImage(*m_bgImage, 0, 0, false);
 
