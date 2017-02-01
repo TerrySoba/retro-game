@@ -5,6 +5,7 @@
 #include <cstdlib>
 
 #include <string>
+#include <memory>
 
 // forward declaration
 struct MODULE;
@@ -16,6 +17,8 @@ public:
     ~MikmodSound();
 
     void playModule(const std::string filename);
+
+    void togglePause();
 
     /**
      * Renders the given number of audioframes to the destination buffer.
@@ -30,7 +33,7 @@ public:
     void renderAudioFrames(size_t frames, void* dest);
 
 private:
-    MODULE* m_module = nullptr;
+    std::shared_ptr<MODULE> m_module;
 
 };
 

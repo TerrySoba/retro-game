@@ -20,7 +20,7 @@ MikmodSound::MikmodSound()
     MikMod_RegisterAllLoaders();
 
     // set some settings of mikmod
-    md_mode = DMODE_SOFT_MUSIC | DMODE_16BITS | DMODE_STEREO | DMODE_HQMIXER | DMODE_INTERP;
+    md_mode = DMODE_SOFT_MUSIC | DMODE_16BITS | DMODE_STEREO | DMODE_HQMIXER | DMODE_INTERP | DMODE_SOFT_SNDFX;
     md_mixfreq = 44100;
     md_reverb = 5;
 
@@ -35,7 +35,6 @@ MikmodSound::~MikmodSound()
     if (m_module)
     {
         Player_Stop();
-        Player_Free(m_module);
     }
     MikMod_Exit();
 }
@@ -47,11 +46,12 @@ void MikmodSound::playModule(const std::string filename)
     if (m_module)
     {
         Player_Stop();
-        Player_Free(m_module);
     }
 
     /* load module */
-    m_module = Player_Load(filename.c_str(), 64, false);
+    m_module = std::shared_ptr<MODULE>(
+                Player_Load(filename.c_str(), 64, false),
+                [](auto* ptr) { Player_Free(ptr); });
 
     if (!m_module)
     {
@@ -62,8 +62,13 @@ void MikmodSound::playModule(const std::string filename)
     m_module->wrap = true;
 
     /* start module */
-    Player_Start(m_module);
+    Player_Start(m_module.get());
 
+}
+
+void MikmodSound::togglePause()
+{
+    Player_TogglePause();
 }
 
 void MikmodSound::renderAudioFrames(size_t frames, void* dest)

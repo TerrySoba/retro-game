@@ -30,7 +30,7 @@ GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
 void GameBase::init()
 {
     m_image = std::make_shared<PngImage>("assets/images/rgb_test.png");
-    m_bgImage = std::make_shared<PngImage>("assets/images/wood_bg.png");
+    m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
@@ -120,6 +120,9 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
 
 const void* GameBase::run(GameInput input)
 {
+
+    if (input.button) m_sound->togglePause();
+
     drawImage(*m_bgImage, 0, 0, false);
 
     if (input.left) m_posX--;
@@ -127,6 +130,7 @@ const void* GameBase::run(GameInput input)
     if (input.down) m_posY++;
     if (input.up) m_posY--;
     m_anim->setFrame(m_frameCounter);
+
 
     drawImage(*m_anim, m_posX, m_posY, true);
 

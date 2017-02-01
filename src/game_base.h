@@ -15,6 +15,8 @@ struct GameInput
     bool right;
     bool up;
     bool down;
+
+    bool button;
 };
 
 // forward declaration
