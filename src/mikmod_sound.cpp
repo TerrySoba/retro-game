@@ -105,13 +105,20 @@ void MikmodSound::playSample(SampleId sampleId)
 void MikmodSound::renderAudioFrames(size_t frames, void* dest)
 {
     auto requestedBytes = frames * 4;
-    retro_bufferSize = requestedBytes;
-    retro_bufferContentLength = 0;
+    retro_bufferBytesRequested = requestedBytes;
+    retro_bufferBytesWritten = 0;
+
+    // MikMod_Update() will the now fill the retro_audioBuffer with up to
+    // retro_bufferBytesRequested bytes of data. The actual number of bytes
+    // will be written to retro_bufferBytesWritten.
+    // In some cases no data will be written at all and retro_bufferBytesWritten
+    // will not be set. Because of this you must set retro_bufferBytesWritten to
+    // 0 before calling MikMod_Update().
     MikMod_Update();
 
-    if (retro_bufferContentLength != requestedBytes)
+    if (retro_bufferBytesWritten != requestedBytes)
     {
-        memset((char*)dest + retro_bufferContentLength, 0, requestedBytes - retro_bufferContentLength);
+        memset((char*)dest + retro_bufferBytesWritten, 0, requestedBytes - retro_bufferBytesWritten);
     }
-    memcpy(dest, retro_audioBuffer, retro_bufferContentLength);
+    memcpy(dest, retro_audioBuffer, retro_bufferBytesWritten);
 }

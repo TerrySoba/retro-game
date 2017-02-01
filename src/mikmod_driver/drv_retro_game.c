@@ -12,13 +12,12 @@ static BOOL retro_IsThere(void)
 
 #define RETRO_AUDIO_BUFFER_SIZE (735 * 4) * 5
 uint8_t* retro_audioBuffer = NULL;
-uint32_t retro_bufferSize = 0;
-uint32_t retro_bufferContentLength = 0;
+uint32_t retro_bufferBytesRequested = 0;
+uint32_t retro_bufferBytesWritten = 0;
 
 static BOOL retro_Init(void)
 {
     retro_audioBuffer = (SBYTE*)malloc(sizeof(SBYTE) * RETRO_AUDIO_BUFFER_SIZE);
-    // retro_bufferPos = 0;
     return VC_Init();
 }
 
@@ -30,7 +29,7 @@ static void retro_Exit(void)
 
 static void retro_Update(void)
 {
-    retro_bufferContentLength = VC_WriteBytes(retro_audioBuffer, retro_bufferSize);
+    retro_bufferBytesWritten = VC_WriteBytes(retro_audioBuffer, retro_bufferBytesRequested);
 }
 
 static BOOL retro_Reset(void)

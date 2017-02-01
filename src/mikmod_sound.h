@@ -14,17 +14,60 @@ struct SAMPLE;
 
 typedef size_t SampleId;
 
+/**
+ * This class is an abstraction for libmikmod.
+ *
+ * It can be used to play mod music and also to play
+ * samples.
+ */
 class MikmodSound
 {
 public:
+    /**
+     * Constructor
+     *
+     * Initializes mikmod.
+     */
     MikmodSound();
+
+    /**
+     * Destructor
+     *
+     * Deinitializes mikmod and frees all loaded samples and modules.
+     */
     ~MikmodSound();
 
+    /**
+     * Plays the given module.
+     * May throw exceptions if file is not found or mikmod
+     * reports an error.
+     *
+     * @param filename The path to the file to be played.
+     */
     void playModule(const std::string filename);
 
+    /**
+     * Toggles pause of the mod playback.
+     */
     void togglePause();
 
+    /**
+     * Loads a sample from the given path and returns
+     * an id for that sample.
+     * May throw exceptions if file is not found or mikmod
+     * reports an error.
+     *
+     * @param filename The path to the file to be loaded.
+     * @return An id that represents the loaded sample.
+     */
     SampleId loadSample(const std::string filename);
+
+    /**
+     * Plays the sample repesented by the id.
+     * \see loadSample on how to get a sample id.
+     *
+     * @param sampleId The id of the sample to be played.
+     */
     void playSample(SampleId sampleId);
 
     /**

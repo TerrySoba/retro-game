@@ -3,6 +3,15 @@
 
 #include <cstdint>
 
+/**
+ * Base class for images.
+ *
+ * The image format is XRGB that means that each pixel is 32bits wide.
+ * The first byte is ignored (X) the follwing bytes represent red (R),
+ * green (G) and blue (B).
+ *
+ * Images begin at the top left corner.
+ */
 class Image
 {
 public:

@@ -7,8 +7,8 @@
 #include <stdlib.h>
 
 extern uint8_t* retro_audioBuffer;
-extern size_t retro_bufferSize;
-extern uint32_t retro_bufferContentLength;
+extern uint32_t retro_bufferBytesRequested;
+extern uint32_t retro_bufferBytesWritten;
 
 extern MDRIVER drv_retrogame;
 
