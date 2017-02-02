@@ -14,7 +14,7 @@ add_custom_target(package_game_assets
 add_definitions(${PNG_DEFINITIONS})
 
 add_library(${PROJECT_NAME} SHARED
-    src/retro_game.cpp
+    src/libretro_interface.cpp
     src/game_base.cpp
     src/image.h
     src/png_image.h

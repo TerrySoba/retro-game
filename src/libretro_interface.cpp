@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <memory>
-#include <cmath>
-#include <limits>
-#include <iostream>
-
 #include "libretro/libretro.h"
 #include "game_base.h"
 
@@ -23,11 +15,21 @@ static retro_environment_t environ_cb;
 static retro_audio_sample_t audio_cb;
 static retro_audio_sample_batch_t audio_batch_cb;
 
-unsigned retro_api_version(void) { return RETRO_API_VERSION; }
+unsigned retro_api_version(void)
+{
+    return RETRO_API_VERSION;
+}
 
 // Cheats
-void retro_cheat_reset(void) {}
-void retro_cheat_set(unsigned index, bool enabled, const char *code) {}
+void retro_cheat_reset(void)
+{
+
+}
+
+void retro_cheat_set(unsigned index, bool enabled, const char *code)
+{
+
+}
 
 // Load a cartridge
 bool retro_load_game(const struct retro_game_info *info)
@@ -35,24 +37,54 @@ bool retro_load_game(const struct retro_game_info *info)
     return true;
 }
 
-bool retro_load_game_special(unsigned game_type, const struct retro_game_info *info, size_t num_info) { return false; }
+bool retro_load_game_special(unsigned game_type, const struct retro_game_info *info, size_t num_info)
+{
+    return false;
+}
 
 // Unload the cartridge
-void retro_unload_game(void) {  }
+void retro_unload_game(void)
+{
 
-unsigned retro_get_region(void) { return RETRO_REGION_NTSC; }
+}
+
+unsigned retro_get_region(void)
+{
+    return RETRO_REGION_NTSC;
+}
 
 // libretro unused api functions
-void retro_set_controller_port_device(unsigned port, unsigned device) {}
+void retro_set_controller_port_device(unsigned port, unsigned device)
+{
+
+}
 
 
-void *retro_get_memory_data(unsigned id) { return NULL; }
-size_t retro_get_memory_size(unsigned id){ return 0; }
+void *retro_get_memory_data(unsigned id)
+{
+    return NULL;
+}
+
+size_t retro_get_memory_size(unsigned id)
+{
+    return 0;
+}
 
 // Serialisation methods
-size_t retro_serialize_size(void) { return 0; }
-bool retro_serialize(void *data, size_t size) { return false; }
-bool retro_unserialize(const void *data, size_t size) { return false; }
+size_t retro_serialize_size(void)
+{
+    return 0;
+}
+
+bool retro_serialize(void *data, size_t size)
+{
+    return false;
+}
+
+bool retro_unserialize(const void *data, size_t size)
+{
+    return false;
+}
 
 // End of retrolib
 void retro_deinit(void)
