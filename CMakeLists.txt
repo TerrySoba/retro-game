@@ -55,3 +55,5 @@ target_link_libraries(${PROJECT_NAME}_testsuite
 
 add_dependencies(${PROJECT_NAME}
     package_game_assets)
+
+add_subdirectory(doxygen)
