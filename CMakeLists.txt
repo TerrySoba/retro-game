@@ -30,6 +30,8 @@ add_library(${PROJECT_NAME} SHARED
     src/mikmod_sound.h
     src/gfx_object.h
     src/actor.h
+    src/enemy_ship.h
+    src/enemy_ship.cpp
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)

@@ -2,6 +2,7 @@
 
 #include "image.h"
 #include "animation.h"
+#include "enemy_ship.h"
 
 #include <cstdint>
 #include <vector>
@@ -59,13 +60,14 @@ private:
     std::shared_ptr<Image> m_image;
     std::shared_ptr<Image> m_bgImage;
     std::shared_ptr<Animation> m_anim;
-
+    std::shared_ptr<EnemyShip> m_enemy;
 
     int32_t m_posX = 100;
     int32_t m_posY = 100;
 
     std::shared_ptr<MikmodSound> m_sound;
     std::vector<char> m_audioBuffer;
+
 
 
     size_t m_sampleId;

@@ -5,6 +5,7 @@
 #include "mikmod_sound.h"
 #include "mikmod_driver/drv_retro_game.h"
 
+
 #include "fmt/format.h"
 #include "exception.h"
 
@@ -29,11 +30,15 @@ GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
 
 void GameBase::init()
 {
-    m_image = std::make_shared<PngImage>("assets/images/projectile.png");
+    m_image = std::make_shared<PngImage>("assets/images/red_ship.png");
     m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
-    std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
+
+    m_enemy = std::make_shared<EnemyShip>(m_anim);
+    m_enemy->setInitialPos(Point(50, 40));
+
+    std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
     // m_sound->playModule("assets/music/test_music.xm");
 
     m_sampleId = m_sound->loadSample("assets/sounds/Per-Reverb.wav");
@@ -139,8 +144,10 @@ const void* GameBase::run(GameInput input)
     m_anim->setFrame(m_frameCounter);
 
 
-    drawImage(*m_anim, m_posX, m_posY, true);
-    drawImage(*m_image, m_posX - 40, m_posY, true);
+    // drawImage(*m_anim, m_posX, m_posY, true);
+    drawImage(*m_image, m_posX, m_posY, true);
+    drawImage(*m_enemy->getImage(), m_enemy->getPos().x, m_enemy->getPos().y, true);
+    m_enemy->act();
 
     ++m_frameCounter;
     return m_framebuffer.data();

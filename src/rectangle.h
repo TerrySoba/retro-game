@@ -5,8 +5,10 @@
 
 struct Point
 {
-    int32_t x;
-    int32_t y;
+    Point(auto _x, auto _y) : x(_x), y(_y) {}
+    Point() {}
+    int32_t x = 0;
+    int32_t y = 0;
 };
 
 class Rectangle
@@ -34,18 +36,12 @@ public:
 
     Point getTopLeft() const
     {
-        Point p;
-        p.x = m_x;
-        p.y = m_y;
-        return p;
+        return Point(m_x, m_y);
     }
 
     Point getBottomRight() const
     {
-        Point p;
-        p.x = m_x + m_width;
-        p.y = m_y + m_height;
-        return p;
+        return Point(m_x + m_width, m_y + m_height);
     }
 
     Rectangle intersection(const Rectangle& other) const;
