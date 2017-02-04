@@ -28,6 +28,8 @@ add_library(${PROJECT_NAME} SHARED
     src/mikmod_driver/drv_retro_game.h
     src/mikmod_sound.cpp
     src/mikmod_sound.h
+    src/gfx_object.h
+    src/actor.h
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)

@@ -29,12 +29,12 @@ GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
 
 void GameBase::init()
 {
-    m_image = std::make_shared<PngImage>("assets/images/rgb_test.png");
+    m_image = std::make_shared<PngImage>("assets/images/projectile.png");
     m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
 
-    m_sound->playModule("assets/music/test_music.xm");
+    // m_sound->playModule("assets/music/test_music.xm");
 
     m_sampleId = m_sound->loadSample("assets/sounds/Per-Reverb.wav");
 
@@ -140,6 +140,7 @@ const void* GameBase::run(GameInput input)
 
 
     drawImage(*m_anim, m_posX, m_posY, true);
+    drawImage(*m_image, m_posX - 40, m_posY, true);
 
     ++m_frameCounter;
     return m_framebuffer.data();
