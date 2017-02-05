@@ -3,7 +3,7 @@ before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq cmake libpng-dev libmikmod-dev
 
-script: cmake && make && ./RetroGame_testsuite
+script: cmake . && make && ./RetroGame_testsuite
 
 compiler:
   - clang
