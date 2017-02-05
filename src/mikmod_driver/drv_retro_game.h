@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#define RETRO_AUDIO_BUFFER_SIZE (735 * 4) * 5
 extern uint8_t* retro_audioBuffer;
 extern uint32_t retro_bufferBytesRequested;
 extern uint32_t retro_bufferBytesWritten;

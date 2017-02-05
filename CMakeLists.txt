@@ -55,7 +55,8 @@ add_executable(${PROJECT_NAME}_testsuite
     test/main.h
     test/main.cpp
     test/rectangle_test.cpp
-    test/png_image_test.cpp)
+    test/png_image_test.cpp
+    test/mikmod_sound_test.cpp)
 
 # Run testsuite
 add_custom_target(run_tests

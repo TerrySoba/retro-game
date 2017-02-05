@@ -4,13 +4,14 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "drv_retro_game.h"
 
 static BOOL retro_IsThere(void)
 {  
 	return 1;
 }
 
-#define RETRO_AUDIO_BUFFER_SIZE (735 * 4) * 5
+
 uint8_t* retro_audioBuffer = NULL;
 uint32_t retro_bufferBytesRequested = 0;
 uint32_t retro_bufferBytesWritten = 0;

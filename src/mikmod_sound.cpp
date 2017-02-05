@@ -16,8 +16,22 @@ MikmodSound::MikmodSound()
     // register our own special driver
     MikMod_RegisterDriver(&drv_retrogame);
 
-    /* register all the module loaders */
-    MikMod_RegisterAllLoaders();
+    // Unfortunately MikMod cannot unload the module loaders.
+    // If they are loaded again, the program hangs.
+    // If already loaded do nothing.
+    // Thanks to SDL_Mixer for this workaround.
+    auto list = MikMod_InfoLoader();
+    if (list)
+    {
+        // loaders are already loaded. Do nothing.
+        MikMod_free(list);
+    }
+    else
+    {
+        // loaders have not been loaded yet.
+        MikMod_RegisterAllLoaders();
+    }
+
 
     // set some settings of mikmod
     md_mode = DMODE_SOFT_MUSIC | DMODE_16BITS | DMODE_STEREO | DMODE_HQMIXER | DMODE_INTERP | DMODE_SOFT_SNDFX;
@@ -41,6 +55,8 @@ MikmodSound::~MikmodSound()
     {
         Player_Stop();
     }
+
+    MikMod_DisableOutput();
     MikMod_Exit();
 }
 
@@ -105,6 +121,12 @@ void MikmodSound::playSample(SampleId sampleId)
 void MikmodSound::renderAudioFrames(size_t frames, void* dest)
 {
     auto requestedBytes = frames * 4;
+
+    if (requestedBytes > RETRO_AUDIO_BUFFER_SIZE)
+    {
+        throw Exception(fmt::format("Requested frames do not fit in buffer. Buffersize: {}bytes  Requested: {}bytes.", RETRO_AUDIO_BUFFER_SIZE, requestedBytes));
+    }
+
     retro_bufferBytesRequested = requestedBytes;
     retro_bufferBytesWritten = 0;
 
