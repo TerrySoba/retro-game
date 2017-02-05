@@ -3,6 +3,10 @@
 #include "image.h"
 #include "animation.h"
 #include "enemy_ship.h"
+#include "player_ship.h"
+#include "input_listener.h"
+
+#include "boost/optional.hpp"
 
 #include <cstdint>
 #include <vector>
@@ -12,12 +16,12 @@
 
 struct GameInput
 {
-    bool left;
-    bool right;
-    bool up;
-    bool down;
+    bool left = false;
+    bool right = false;
+    bool up = false;
+    bool down = false;
 
-    bool button;
+    bool button = false;
 };
 
 // forward declaration
@@ -50,6 +54,9 @@ public:
     }
 
 private:
+    void handleInputs(GameInput input);
+
+private:
     uint32_t m_frameWidth;
     uint32_t m_frameHeight;
 
@@ -61,6 +68,7 @@ private:
     std::shared_ptr<Image> m_bgImage;
     std::shared_ptr<Animation> m_anim;
     std::shared_ptr<EnemyShip> m_enemy;
+    std::shared_ptr<PlayerShip> m_player;
 
     int32_t m_posX = 100;
     int32_t m_posY = 100;
@@ -68,7 +76,9 @@ private:
     std::shared_ptr<MikmodSound> m_sound;
     std::vector<char> m_audioBuffer;
 
-
+    std::vector<std::weak_ptr<InputListener>> m_inputListeners;
 
     size_t m_sampleId;
+
+    GameInput m_lastGameInput;
 };

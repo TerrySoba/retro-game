@@ -32,6 +32,9 @@ add_library(${PROJECT_NAME} SHARED
     src/actor.h
     src/enemy_ship.h
     src/enemy_ship.cpp
+    src/player_ship.h
+    src/player_ship.cpp
+    src/input_listener.h
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)

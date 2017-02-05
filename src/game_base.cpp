@@ -38,6 +38,10 @@ void GameBase::init()
     m_enemy = std::make_shared<EnemyShip>(m_anim);
     m_enemy->setInitialPos(Point(50, 40));
 
+    m_player = std::make_shared<PlayerShip>(m_image, Point(10, 10));
+
+    m_inputListeners.push_back(m_player);
+
     std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
     // m_sound->playModule("assets/music/test_music.xm");
 
@@ -65,7 +69,7 @@ constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
 void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 {
 
-    const uint32_t purple = rgb(255,0,255);
+    static const uint32_t purple = rgb(255,0,255);
 
     while (start != end)
     {
@@ -128,6 +132,7 @@ void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransp
 
 const void* GameBase::run(GameInput input)
 {
+    handleInputs(input);
 
     if (input.button)
     {
@@ -143,14 +148,76 @@ const void* GameBase::run(GameInput input)
     if (input.up) m_posY--;
     m_anim->setFrame(m_frameCounter);
 
+    ++m_frameCounter;
+
 
     // drawImage(*m_anim, m_posX, m_posY, true);
-    drawImage(*m_image, m_posX, m_posY, true);
+    // drawImage(*m_image, m_posX, m_posY, true);
     drawImage(*m_enemy->getImage(), m_enemy->getPos().x, m_enemy->getPos().y, true);
     m_enemy->act();
 
-    ++m_frameCounter;
+    drawImage(*m_player->getImage(), m_player->getPos().x, m_player->getPos().y, true);
+    m_player->act();
+
+
     return m_framebuffer.data();
+}
+
+void GameBase::handleInputs(GameInput input)
+{
+    auto callOnAllListeners = [this](std::function<void(InputListener&)> functor)
+    {
+        for (auto& listener : m_inputListeners)
+        {
+            auto ptr = listener.lock();
+            if (ptr) functor(*ptr);
+        }
+    };
+
+    if (input.left && !m_lastGameInput.left)
+    {
+        callOnAllListeners([](auto& listener) {listener.leftPressed();});
+    }
+    if (!input.left && m_lastGameInput.left)
+    {
+        callOnAllListeners([](auto& listener) {listener.leftReleased();});
+    }
+    if (input.right && !m_lastGameInput.right)
+    {
+        callOnAllListeners([](auto& listener) {listener.rightPressed();});
+    }
+    if (!input.right && m_lastGameInput.right)
+    {
+        callOnAllListeners([](auto& listener) {listener.rightReleased();});
+    }
+
+    if (input.up && !m_lastGameInput.up)
+    {
+        callOnAllListeners([](auto& listener) {listener.upPressed();});
+    }
+    if (!input.up && m_lastGameInput.up)
+    {
+        callOnAllListeners([](auto& listener) {listener.upReleased();});
+    }
+    if (input.down && !m_lastGameInput.down)
+    {
+        callOnAllListeners([](auto& listener) {listener.downPressed();});
+    }
+    if (!input.down && m_lastGameInput.down)
+    {
+        callOnAllListeners([](auto& listener) {listener.downReleased();});
+    }
+
+    if (input.button && !m_lastGameInput.button)
+    {
+        callOnAllListeners([](auto& listener) {listener.buttonPressed();});
+    }
+    if (!input.button && m_lastGameInput.button)
+    {
+        callOnAllListeners([](auto& listener) {listener.buttonReleased();});
+    }
+
+    m_lastGameInput = input;
 }
 
 void GameBase::audio(std::function<size_t(const int16_t*,size_t)> batchAudioCallback)
