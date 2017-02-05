@@ -109,7 +109,7 @@ void retro_set_input_state(retro_input_state_t cb) { input_state_cb = cb; }
 
 void retro_init(void)
 {
-    s_game = std::make_unique<GameBase>(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    s_game = std::unique_ptr<GameBase>(new GameBase(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));
 
     s_game->init();
 

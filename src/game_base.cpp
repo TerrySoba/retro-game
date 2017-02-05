@@ -176,45 +176,45 @@ void GameBase::handleInputs(GameInput input)
 
     if (input.left && !m_lastGameInput.left)
     {
-        callOnAllListeners([](auto& listener) {listener.leftPressed();});
+        callOnAllListeners([](InputListener& listener) {listener.leftPressed();});
     }
     if (!input.left && m_lastGameInput.left)
     {
-        callOnAllListeners([](auto& listener) {listener.leftReleased();});
+        callOnAllListeners([](InputListener& listener) {listener.leftReleased();});
     }
     if (input.right && !m_lastGameInput.right)
     {
-        callOnAllListeners([](auto& listener) {listener.rightPressed();});
+        callOnAllListeners([](InputListener& listener) {listener.rightPressed();});
     }
     if (!input.right && m_lastGameInput.right)
     {
-        callOnAllListeners([](auto& listener) {listener.rightReleased();});
+        callOnAllListeners([](InputListener& listener) {listener.rightReleased();});
     }
 
     if (input.up && !m_lastGameInput.up)
     {
-        callOnAllListeners([](auto& listener) {listener.upPressed();});
+        callOnAllListeners([](InputListener& listener) {listener.upPressed();});
     }
     if (!input.up && m_lastGameInput.up)
     {
-        callOnAllListeners([](auto& listener) {listener.upReleased();});
+        callOnAllListeners([](InputListener& listener) {listener.upReleased();});
     }
     if (input.down && !m_lastGameInput.down)
     {
-        callOnAllListeners([](auto& listener) {listener.downPressed();});
+        callOnAllListeners([](InputListener& listener) {listener.downPressed();});
     }
     if (!input.down && m_lastGameInput.down)
     {
-        callOnAllListeners([](auto& listener) {listener.downReleased();});
+        callOnAllListeners([](InputListener& listener) {listener.downReleased();});
     }
 
     if (input.button && !m_lastGameInput.button)
     {
-        callOnAllListeners([](auto& listener) {listener.buttonPressed();});
+        callOnAllListeners([](InputListener& listener) {listener.buttonPressed();});
     }
     if (!input.button && m_lastGameInput.button)
     {
-        callOnAllListeners([](auto& listener) {listener.buttonReleased();});
+        callOnAllListeners([](InputListener& listener) {listener.buttonReleased();});
     }
 
     m_lastGameInput = input;

@@ -5,7 +5,7 @@
 
 struct Point
 {
-    Point(auto _x, auto _y) : x(_x), y(_y) {}
+    Point(int32_t _x, int32_t _y) : x(_x), y(_y) {}
     Point() {}
     int32_t x = 0;
     int32_t y = 0;

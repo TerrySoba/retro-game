@@ -56,7 +56,7 @@ void MikmodSound::playModule(const std::string filename)
     /* load module */
     m_module = std::shared_ptr<MODULE>(
                 Player_Load(filename.c_str(), 64, false),
-                [](auto* ptr) { Player_Free(ptr); });
+                [](MODULE* ptr) { Player_Free(ptr); });
 
     if (!m_module)
     {
@@ -86,7 +86,7 @@ SampleId MikmodSound::loadSample(const std::string filename)
 
     m_samples.push_back(
                 std::shared_ptr<SAMPLE>(sample,
-                    [](auto* ptr) { Sample_Free(ptr); }));
+                    [](SAMPLE* ptr) { Sample_Free(ptr); }));
 
     return m_samples.size() - 1;
 }
