@@ -3,7 +3,7 @@ sudo: required
 language: c++
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq cmake libpng-dev libmikmod-dev
+- sudo apt-get install -qq cmake libpng-dev libmikmod-dev libboost-all-dev
 
 script: cmake . && make && ./RetroGame_testsuite
 
