@@ -17,7 +17,7 @@ uint32_t retro_bufferBytesWritten = 0;
 
 static BOOL retro_Init(void)
 {
-    retro_audioBuffer = (SBYTE*)malloc(sizeof(SBYTE) * RETRO_AUDIO_BUFFER_SIZE);
+    retro_audioBuffer = (uint8_t*)malloc(sizeof(SBYTE) * RETRO_AUDIO_BUFFER_SIZE);
     return VC_Init();
 }
 
@@ -29,7 +29,7 @@ static void retro_Exit(void)
 
 static void retro_Update(void)
 {
-    retro_bufferBytesWritten = VC_WriteBytes(retro_audioBuffer, retro_bufferBytesRequested);
+    retro_bufferBytesWritten = VC_WriteBytes((SBYTE*)retro_audioBuffer, retro_bufferBytesRequested);
 }
 
 static BOOL retro_Reset(void)
