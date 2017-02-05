@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/TerrySoba/retro-game.svg?branch=master)](https://travis-ci.org/TerrySoba/retro-game)
+
 # retro-game
 Experiments using [libretro](https://www.libretro.com/).
 
