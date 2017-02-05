@@ -48,7 +48,9 @@ MDRIVER drv_retrogame =
     255,
 
     "retro",
+#if LIBMIKMOD_VERSION_MAJOR >= 3 && LIBMIKMOD_VERSION_MINOR >= 3
     NULL,
+#endif
 
     NULL, // todo: may this be NULL?
     retro_IsThere,

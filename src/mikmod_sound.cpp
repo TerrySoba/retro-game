@@ -25,7 +25,7 @@ MikmodSound::MikmodSound()
     md_reverb = 5;
 
     /* initialize the library */
-    if (MikMod_Init("")) {
+    if (MikMod_Init(const_cast<char*>(""))) {
         throw Exception(fmt::format("Could not initialize sound, reason: {}\n", MikMod_strerror(MikMod_errno)));
     }
 
@@ -55,7 +55,7 @@ void MikmodSound::playModule(const std::string filename)
 
     /* load module */
     m_module = std::shared_ptr<MODULE>(
-                Player_Load(filename.c_str(), 64, false),
+                Player_Load(const_cast<char*>(filename.c_str()), 64, false),
                 [](MODULE* ptr) { Player_Free(ptr); });
 
     if (!m_module)
@@ -78,7 +78,7 @@ void MikmodSound::togglePause()
 
 SampleId MikmodSound::loadSample(const std::string filename)
 {
-    auto sample = Sample_Load(filename.c_str());
+    auto sample = Sample_Load(const_cast<char*>(filename.c_str()));
     if (!sample)
     {
         throw Exception(fmt::format("Could not load sample, reason: {}\n", MikMod_strerror(MikMod_errno)));
