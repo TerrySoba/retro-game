@@ -17,16 +17,15 @@ PngImage::PngImage(const std::string& filename)
 
     /* open file and test for it being a png */
     FILE *fp = fopen(filename.c_str(), "rb");
+    if (fp == NULL)
+    {
+        throw Exception(fmt::format("Could not open file \"{}\". errno: {}",  filename, errno));
+    }
 
     BOOST_SCOPE_EXIT_ALL(&)
     {
         fclose(fp);
     };
-
-    if (fp == NULL)
-    {
-        throw Exception(fmt::format("Could not open file \"{}\". errno: {}",  filename, errno));
-    }
 
     fread(header, 1, 8, fp);
     if (png_sig_cmp(header, 0, 8))

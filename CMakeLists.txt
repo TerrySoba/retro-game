@@ -52,8 +52,15 @@ target_link_libraries(${PROJECT_NAME}
 
 add_executable(${PROJECT_NAME}_testsuite
     3rd_party/catch/catch.hpp
+    test/main.h
     test/main.cpp
-    test/rectangle_test.cpp)
+    test/rectangle_test.cpp
+    test/png_image_test.cpp)
+
+# Run testsuite
+add_custom_target(run_tests
+    COMMAND ${PROJECT_NAME}_testsuite -- --test-data-dir=${CMAKE_SOURCE_DIR}/test/test_data)
+
 
 target_link_libraries(${PROJECT_NAME}_testsuite
     ${PROJECT_NAME})
