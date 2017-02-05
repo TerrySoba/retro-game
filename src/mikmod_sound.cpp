@@ -24,7 +24,11 @@ MikmodSound::MikmodSound()
     if (list)
     {
         // loaders are already loaded. Do nothing.
+#if LIBMIKMOD_VERSION_MAJOR >= 3 && LIBMIKMOD_VERSION_MINOR >= 3
         MikMod_free(list);
+#else
+        free(list);
+#endif
     }
     else
     {
