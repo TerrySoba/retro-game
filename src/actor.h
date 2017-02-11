@@ -4,7 +4,7 @@
 #include "gfx_object.h"
 #include <vector>
 
-class Actor; test
+class Actor;
 
 class EngineAccess
 {
