@@ -2,6 +2,17 @@
 #define ACTOR_H
 
 #include "gfx_object.h"
+#include <vector>
+
+class Actor; test
+
+class EngineAccess
+{
+public:
+    virtual ~EngineAccess();
+    virtual std::shared_ptr<Actor> getActorByName(const std::string& name) = 0;
+    virtual std::vector<std::shared_ptr<Actor>> getAllActors() = 0;
+};
 
 class Actor : public GfxObject
 {
@@ -24,6 +35,10 @@ public:
      * bounding box or even it's image.
      */
     virtual void act() = 0;
+
+protected:
+
+
 };
 
 #endif // ACTOR_H

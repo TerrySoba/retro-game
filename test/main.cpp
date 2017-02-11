@@ -10,7 +10,7 @@ std::string TestParams::testDataDir;
 
 std::string getTestDataDir(int argc, char* argv[])
 {
-    std::string testDataDir = "test/test_data/";
+    std::string testDataDir = "../retro-game/test/test_data/";
 
     for (int i = 0; i < argc; ++i)
     {

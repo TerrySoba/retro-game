@@ -8,7 +8,7 @@
  * The *Pressed() methods are called at the moment the input becomes true.
  * In electronics terms this would be at the rising edge.
  *
- * The *Release() methods are called at the moment the input becomes false.
+ * The *Released() methods are called at the moment the input becomes false.
  * In electronics terms this would be at the falling edge.
  */
 class InputListener
