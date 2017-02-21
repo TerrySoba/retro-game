@@ -30,7 +30,7 @@ public:
     // Actor interface
 public:
     Rectangle getBoundingBox() override;
-    void act() override;
+    void act(EngineAccess& engine) override;
 
 
 private:

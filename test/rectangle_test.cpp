@@ -107,3 +107,18 @@ TEST_CASE("equal rectangles")
     REQUIRE(inter.getTopLeft().y == r1.getTopLeft().y);
 }
 
+TEST_CASE("rectangle area")
+{
+    Rectangle r1(0, 0, 100, 100);
+    REQUIRE(r1.area() == 100*100);
+
+    Rectangle r2(0, 0, -100, 100);
+    REQUIRE(r2.area() == 100*100);
+
+    Rectangle r3(0, 0, 100, -100);
+    REQUIRE(r3.area() == 100*100);
+
+    Rectangle r4(0, 0, -100, -100);
+    REQUIRE(r4.area() == 100*100);
+}
+

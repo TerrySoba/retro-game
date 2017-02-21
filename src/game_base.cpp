@@ -19,9 +19,11 @@
 #include <unistd.h>
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
-    m_frameWidth(frameWidth),
-    m_frameHeight(frameHeight),
-    m_framebuffer(frameWidth * frameHeight),
+//    m_frameWidth(frameWidth),
+//    m_frameHeight(frameHeight),
+//    m_framebuffer(frameWidth * frameHeight),
+    m_surface(new PaintSurface(frameWidth, frameHeight)),
+    m_engine(new GfxEngine),
     m_sound(new MikmodSound),
     m_audioBuffer(735 * 4) // 44100 / 60 == 735 , one audio frame == 4 bytes
 {
@@ -35,15 +37,16 @@ void GameBase::init()
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
 
 
-    m_enemy = std::make_shared<EnemyShip>(m_anim);
-    m_enemy->setInitialPos(Point(50, 40));
+    auto enemy = std::make_shared<EnemyShip>(m_anim);
+    enemy->setInitialPos(Point(50, 40));
+    m_engine->addActor(enemy, "TheEnemy");
 
-    m_player = std::make_shared<PlayerShip>(m_image, Point(10, 10));
+    auto player = std::make_shared<PlayerShip>(m_image, Point(10, 10));
+    m_engine->addActor(player, "ThePlayer");
 
-    m_inputListeners.push_back(m_player);
+    m_inputListeners.push_back(player);
 
-    std::memset(m_framebuffer.data(), 0, m_frameWidth * m_frameHeight * 4);
-    // m_sound->playModule("assets/music/test_music.xm");
+    m_sound->playModule("assets/music/test_music.xm");
 
     m_sampleId = m_sound->loadSample("assets/sounds/Per-Reverb.wav");
 
@@ -53,82 +56,7 @@ void GameBase::deinit()
 {
 }
 
-void GameBase::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)
-{
-    assert(x < m_frameWidth);
-    assert(y < m_frameHeight);
-    m_framebuffer[x + y*m_frameWidth] = pixel;
-}
 
-constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
-{
-    return b | (g << 8) | (r << 16);
-}
-
-
-void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
-{
-
-    static const uint32_t purple = rgb(255,0,255);
-
-    while (start != end)
-    {
-        if (*start != purple)
-        {
-            *dest++ = *start++;
-        }
-        else
-        {
-            dest++;
-            start++;
-        }
-    }
-
-}
-
-
-void GameBase::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransparent)
-{
-    Rectangle screenRect(0, 0, m_frameWidth, m_frameHeight);
-
-    // check if image is visible at all
-    Rectangle imgRect(x, y, img.getWidth(), img.getHeight());
-    auto inter = screenRect.intersection(imgRect);
-
-    // only draw img if it is visible
-    bool visible = (inter.getWidth() > 0 &&
-                    inter.getHeight() > 0);
-
-    if (visible)
-    {
-        auto copyFunctor =
-                makePurpleTransparent ?
-                [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
-                [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
-
-        auto tl = inter.getTopLeft();
-
-        auto xOffScreen = tl.x;
-        auto yOffScreen = tl.y;
-
-        auto xOffImg = tl.x - x;
-        auto yOffImg = tl.y - y;
-
-        auto imgData = img.getData();
-
-        auto drawWidth = inter.getWidth();
-
-        auto imgWidth = img.getWidth();
-
-        for (int line = 0; line < inter.getHeight(); ++line)
-        {
-            copyFunctor(
-                    &imgData[(line + yOffImg) * imgWidth + xOffImg],
-                    &imgData[(line + yOffImg) * imgWidth + xOffImg + drawWidth],
-                    &m_framebuffer[(yOffScreen + line) * m_frameWidth + xOffScreen]);
-        }
-    }
-}
 
 const void* GameBase::run(GameInput input)
 {
@@ -140,7 +68,7 @@ const void* GameBase::run(GameInput input)
     }
         //m_sound->togglePause();
 
-    drawImage(*m_bgImage, 0, 0, false);
+    m_surface->drawImage(*m_bgImage, 0, 0, false);
 
     if (input.left) m_posX--;
     if (input.right) m_posX++;
@@ -153,14 +81,15 @@ const void* GameBase::run(GameInput input)
 
     // drawImage(*m_anim, m_posX, m_posY, true);
     // drawImage(*m_image, m_posX, m_posY, true);
-    drawImage(*m_enemy->getImage(), m_enemy->getPos().x, m_enemy->getPos().y, true);
-    m_enemy->act();
+//    m_surface->drawImage(*m_enemy->getImage(), m_enemy->getPos().x, m_enemy->getPos().y, true);
+//    m_enemy->act();
 
-    drawImage(*m_player->getImage(), m_player->getPos().x, m_player->getPos().y, true);
-    m_player->act();
+//    m_surface->drawImage(*m_player->getImage(), m_player->getPos().x, m_player->getPos().y, true);
+//    m_player->act();
 
+    m_engine->draw(*m_surface);
 
-    return m_framebuffer.data();
+    return m_surface->getData();
 }
 
 void GameBase::handleInputs(GameInput input)

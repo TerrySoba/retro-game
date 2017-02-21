@@ -1,6 +1,7 @@
 #include "enemy_ship.h"
 
 #include "exception.h"
+#include "engine_access.h"
 
 #include <cmath>
 
@@ -34,11 +35,20 @@ std::shared_ptr<Image> EnemyShip::getImage()
 
 Rectangle EnemyShip::getBoundingBox()
 {
-    return Rectangle(m_pos.x, m_pos.y, m_image->getWidth(), m_image->getHeight());
+    auto pos = getPos();
+    return Rectangle(pos.x, pos.y, m_image->getWidth(), m_image->getHeight());
 }
 
-void EnemyShip::act()
+void EnemyShip::act(EngineAccess& engine)
 {
+    auto player = engine.getActorByName("ThePlayer");
+    auto intersection = player->getBoundingBox().intersection(getBoundingBox());
+
+    if (intersection.area() > 0)
+    {
+        m_actCounter += 3;
+    }
+
     m_actCounter++;
 }
 

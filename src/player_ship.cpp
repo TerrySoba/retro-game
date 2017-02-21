@@ -71,7 +71,7 @@ Rectangle PlayerShip::getBoundingBox()
     return Rectangle(m_pos.x, m_pos.y, m_image->getWidth(), m_image->getHeight());
 }
 
-void PlayerShip::act()
+void PlayerShip::act(EngineAccess& engine)
 {
     m_pos.x += m_deltaX;
     m_pos.y += m_deltaY;

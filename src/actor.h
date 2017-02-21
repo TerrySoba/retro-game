@@ -2,17 +2,12 @@
 #define ACTOR_H
 
 #include "gfx_object.h"
+
 #include <vector>
 
-class Actor;
+// forward declaration
+class EngineAccess;
 
-class EngineAccess
-{
-public:
-    virtual ~EngineAccess();
-    virtual std::shared_ptr<Actor> getActorByName(const std::string& name) = 0;
-    virtual std::vector<std::shared_ptr<Actor>> getAllActors() = 0;
-};
 
 class Actor : public GfxObject
 {
@@ -34,7 +29,7 @@ public:
      * The idea is that the actor may change it's position,
      * bounding box or even it's image.
      */
-    virtual void act() = 0;
+    virtual void act(EngineAccess& engine) = 0;
 
 protected:
 

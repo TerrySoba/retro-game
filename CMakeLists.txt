@@ -35,6 +35,11 @@ add_library(${PROJECT_NAME} SHARED
     src/player_ship.h
     src/player_ship.cpp
     src/input_listener.h
+    src/engine_access.h
+    src/gfx_engine.h
+    src/gfx_engine.cpp
+    src/paint_surface.h
+    src/paint_surface.cpp
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h)

@@ -46,6 +46,11 @@ public:
 
     Rectangle intersection(const Rectangle& other) const;
 
+    int32_t area()
+    {
+        // width and height are always positive!
+        return m_width * m_height;
+    }
 
 private:
     int32_t m_x;
