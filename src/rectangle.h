@@ -1,15 +1,9 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include <cstdint>
+#include "Eigen/Core"
 
-struct Point
-{
-    Point(int32_t _x, int32_t _y) : x(_x), y(_y) {}
-    Point() {}
-    int32_t x = 0;
-    int32_t y = 0;
-};
+#include <cstdint>
 
 class Rectangle
 {
@@ -34,14 +28,14 @@ public:
         return m_height;
     }
 
-    Point getTopLeft() const
+    Eigen::Vector2i getTopLeft() const
     {
-        return Point(m_x, m_y);
+        return Eigen::Vector2i(m_x, m_y);
     }
 
-    Point getBottomRight() const
+    Eigen::Vector2i getBottomRight() const
     {
-        return Point(m_x + m_width, m_y + m_height);
+        return Eigen::Vector2i(m_x + m_width, m_y + m_height);
     }
 
     Rectangle intersection(const Rectangle& other) const;

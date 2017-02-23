@@ -15,17 +15,20 @@ EnemyShip::EnemyShip(std::shared_ptr<Image> image) :
     }
 }
 
-void EnemyShip::setInitialPos(const Point& pos)
+void EnemyShip::setInitialPos(const Eigen::Vector2i& pos)
 {
-    m_pos = pos;
+    m_pos = pos.cast<float>();
 }
 
-Point EnemyShip::getPos()
+Eigen::Vector2i EnemyShip::getPos()
 {
     auto s = std::sin(m_actCounter / 50.0);
     s *= s;
 
-    return Point(m_pos.x + s * 150.0, m_pos.y);
+    Eigen::Vector2i wobble(s * 30, 0);
+
+
+    return m_pos.cast<int>() + wobble;
 }
 
 std::shared_ptr<Image> EnemyShip::getImage()
@@ -36,7 +39,7 @@ std::shared_ptr<Image> EnemyShip::getImage()
 Rectangle EnemyShip::getBoundingBox()
 {
     auto pos = getPos();
-    return Rectangle(pos.x, pos.y, m_image->getWidth(), m_image->getHeight());
+    return Rectangle(pos[0], pos[1], m_image->getWidth(), m_image->getHeight());
 }
 
 void EnemyShip::act(EngineAccess& engine)
@@ -44,9 +47,14 @@ void EnemyShip::act(EngineAccess& engine)
     auto player = engine.getActorByName("ThePlayer");
     auto intersection = player->getBoundingBox().intersection(getBoundingBox());
 
-    if (intersection.area() > 0)
+    // find direction to player ship
+    Eigen::Vector2f direction = (player->getPos() - getPos()).cast<float>();
+
+    direction.normalize();
+
+    if (intersection.area() == 0)
     {
-        m_actCounter += 3;
+        m_pos += direction * 0.5;
     }
 
     m_actCounter++;

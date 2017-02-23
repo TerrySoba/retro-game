@@ -7,11 +7,11 @@
 class PlayerShip : public Actor, public InputListener
 {
 public:
-    PlayerShip(std::shared_ptr<Image> image, Point initialPos);
+    PlayerShip(std::shared_ptr<Image> image, Eigen::Vector2i initialPos);
 
     // GfxObject interface
 public:
-    Point getPos() override;
+    Eigen::Vector2i getPos() override;
     std::shared_ptr<Image> getImage() override;
 
     // InputListener interface
@@ -35,7 +35,7 @@ public:
 
 private:
     std::shared_ptr<Image> m_image;
-    Point m_pos;
+    Eigen::Vector2i m_pos;
 
     int32_t m_deltaX = 0;
     int32_t m_deltaY = 0;

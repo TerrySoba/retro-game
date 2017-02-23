@@ -8,10 +8,10 @@ TEST_CASE("Rectangle constructor")
 
     REQUIRE(r.getWidth() == 3);
     REQUIRE(r.getHeight() == 4);
-    REQUIRE(r.getTopLeft().x == 1);
-    REQUIRE(r.getTopLeft().y == 2);
-    REQUIRE(r.getBottomRight().x == 4);
-    REQUIRE(r.getBottomRight().y == 6);
+    REQUIRE(r.getTopLeft()[0] == 1);
+    REQUIRE(r.getTopLeft()[1] == 2);
+    REQUIRE(r.getBottomRight()[0] == 4);
+    REQUIRE(r.getBottomRight()[1] == 6);
 }
 
 TEST_CASE("Intersection is Commutative")
@@ -24,8 +24,7 @@ TEST_CASE("Intersection is Commutative")
 
     REQUIRE(inter1.getWidth() == inter2.getWidth());
     REQUIRE(inter1.getHeight() == inter2.getHeight());
-    REQUIRE(inter1.getTopLeft().x == inter2.getTopLeft().x);
-    REQUIRE(inter1.getTopLeft().y == inter2.getTopLeft().y);
+    REQUIRE(inter1.getTopLeft() == inter2.getTopLeft());
 }
 
 TEST_CASE("Intersection tests")
@@ -39,8 +38,8 @@ TEST_CASE("Intersection tests")
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 30);
         REQUIRE(inter.getHeight() == 20);
-        REQUIRE(inter.getTopLeft().x == 0);
-        REQUIRE(inter.getTopLeft().y == 0);
+        REQUIRE(inter.getTopLeft()[0] == 0);
+        REQUIRE(inter.getTopLeft()[1] == 0);
     }
 
     SECTION("r2 is bottom left of r1, no intersection")
@@ -49,8 +48,8 @@ TEST_CASE("Intersection tests")
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 0);
         REQUIRE(inter.getHeight() == 0);
-        REQUIRE(inter.getTopLeft().x == 0);
-        REQUIRE(inter.getTopLeft().y == 0);
+        REQUIRE(inter.getTopLeft()[0] == 0);
+        REQUIRE(inter.getTopLeft()[1] == 0);
     }
 
     SECTION("r2 is inside of r1")
@@ -59,8 +58,8 @@ TEST_CASE("Intersection tests")
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 10);
         REQUIRE(inter.getHeight() == 20);
-        REQUIRE(inter.getTopLeft().x == 20);
-        REQUIRE(inter.getTopLeft().y == 30);
+        REQUIRE(inter.getTopLeft()[0] == 20);
+        REQUIRE(inter.getTopLeft()[1] == 30);
     }
 
     SECTION("r2 overlaps with bottom of r1")
@@ -69,8 +68,8 @@ TEST_CASE("Intersection tests")
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 10);
         REQUIRE(inter.getHeight() == 70);
-        REQUIRE(inter.getTopLeft().x == 20);
-        REQUIRE(inter.getTopLeft().y == 30);
+        REQUIRE(inter.getTopLeft()[0] == 20);
+        REQUIRE(inter.getTopLeft()[1] == 30);
     }
 
     SECTION("r2 forms a cross with r1")
@@ -79,8 +78,8 @@ TEST_CASE("Intersection tests")
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 100);
         REQUIRE(inter.getHeight() == 10);
-        REQUIRE(inter.getTopLeft().x == 0);
-        REQUIRE(inter.getTopLeft().y == 10);
+        REQUIRE(inter.getTopLeft()[0] == 0);
+        REQUIRE(inter.getTopLeft()[1] == 10);
     }
 }
 
@@ -90,8 +89,8 @@ TEST_CASE("Check rectangle normalization")
     Rectangle r1(0, 0, -13, -17);
     REQUIRE(r1.getWidth() == 13);
     REQUIRE(r1.getHeight() == 17);
-    REQUIRE(r1.getTopLeft().x == -13);
-    REQUIRE(r1.getTopLeft().y == -17);
+    REQUIRE(r1.getTopLeft()[0] == -13);
+    REQUIRE(r1.getTopLeft()[1] == -17);
 }
 
 TEST_CASE("equal rectangles")
@@ -103,8 +102,7 @@ TEST_CASE("equal rectangles")
 
     REQUIRE(inter.getWidth() == r1.getWidth());
     REQUIRE(inter.getHeight() == r1.getHeight());
-    REQUIRE(inter.getTopLeft().x == r1.getTopLeft().x);
-    REQUIRE(inter.getTopLeft().y == r1.getTopLeft().y);
+    REQUIRE(inter.getTopLeft() == r1.getTopLeft());
 }
 
 TEST_CASE("rectangle area")

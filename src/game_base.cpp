@@ -19,9 +19,6 @@
 #include <unistd.h>
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
-//    m_frameWidth(frameWidth),
-//    m_frameHeight(frameHeight),
-//    m_framebuffer(frameWidth * frameHeight),
     m_surface(new PaintSurface(frameWidth, frameHeight)),
     m_engine(new GfxEngine),
     m_sound(new MikmodSound),
@@ -38,10 +35,10 @@ void GameBase::init()
 
 
     auto enemy = std::make_shared<EnemyShip>(m_anim);
-    enemy->setInitialPos(Point(50, 40));
+    enemy->setInitialPos(Eigen::Vector2i(50, 40));
     m_engine->addActor(enemy, "TheEnemy");
 
-    auto player = std::make_shared<PlayerShip>(m_image, Point(10, 10));
+    auto player = std::make_shared<PlayerShip>(m_image, Eigen::Vector2i(10, 10));
     m_engine->addActor(player, "ThePlayer");
 
     m_inputListeners.push_back(player);
@@ -77,15 +74,6 @@ const void* GameBase::run(GameInput input)
     m_anim->setFrame(m_frameCounter);
 
     ++m_frameCounter;
-
-
-    // drawImage(*m_anim, m_posX, m_posY, true);
-    // drawImage(*m_image, m_posX, m_posY, true);
-//    m_surface->drawImage(*m_enemy->getImage(), m_enemy->getPos().x, m_enemy->getPos().y, true);
-//    m_enemy->act();
-
-//    m_surface->drawImage(*m_player->getImage(), m_player->getPos().x, m_player->getPos().y, true);
-//    m_player->act();
 
     m_engine->draw(*m_surface);
 

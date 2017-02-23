@@ -46,6 +46,6 @@ void GfxEngine::draw(PaintSurface& surface)
     for (auto& actor: m_actors)
     {
         auto pos = actor.second->getPos();
-        surface.drawImage(*actor.second->getImage(), pos.x, pos.y, true); // @todo not all actors need transparency...
+        surface.drawImage(*actor.second->getImage(), pos[0], pos[1], true); // @todo not all actors need transparency...
     }
 }

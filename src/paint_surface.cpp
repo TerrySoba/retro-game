@@ -67,11 +67,11 @@ void PaintSurface::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTr
 
         auto tl = inter.getTopLeft();
 
-        auto xOffScreen = tl.x;
-        auto yOffScreen = tl.y;
+        auto xOffScreen = tl[0];
+        auto yOffScreen = tl[1];
 
-        auto xOffImg = tl.x - x;
-        auto yOffImg = tl.y - y;
+        auto xOffImg = tl[0] - x;
+        auto yOffImg = tl[1] - y;
 
         auto imgData = img.getData();
 

@@ -12,7 +12,7 @@ public:
     /**
      * Returns the position of the top left corner of the GfxObject.
      */
-    virtual Point getPos() = 0;
+    virtual Eigen::Vector2i getPos() = 0;
 
     /**
      * Returns the image that should be shown to represent this GfxObject.

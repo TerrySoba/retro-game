@@ -4,16 +4,18 @@
 #include "actor.h"
 #include "image.h"
 
+#include "Eigen/Core"
+
 class EnemyShip : public Actor
 {
 public:
     EnemyShip(std::shared_ptr<Image> image);
 
-    void setInitialPos(const Point& pos);
+    void setInitialPos(const Eigen::Vector2i& pos);
 
     // GfxObject interface
 public:
-    Point getPos() override;
+    Eigen::Vector2i getPos() override;
     std::shared_ptr<Image> getImage() override;
 
     // Actor interface
@@ -24,7 +26,7 @@ public:
 
 private:
     std::shared_ptr<Image> m_image;
-    Point m_pos;
+    Eigen::Vector2f m_pos;
 
     size_t m_actCounter = 0;
 

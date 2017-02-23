@@ -1,12 +1,12 @@
 #include "player_ship.h"
 
-PlayerShip::PlayerShip(std::shared_ptr<Image> image, Point initialPos) :
+PlayerShip::PlayerShip(std::shared_ptr<Image> image, Eigen::Vector2i initialPos) :
     m_image(image),
     m_pos(initialPos)
 {
 }
 
-Point PlayerShip::getPos()
+Eigen::Vector2i PlayerShip::getPos()
 {
     return m_pos;
 }
@@ -68,11 +68,11 @@ void PlayerShip::buttonReleased()
 
 Rectangle PlayerShip::getBoundingBox()
 {
-    return Rectangle(m_pos.x, m_pos.y, m_image->getWidth(), m_image->getHeight());
+    return Rectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
 }
 
 void PlayerShip::act(EngineAccess& engine)
 {
-    m_pos.x += m_deltaX;
-    m_pos.y += m_deltaY;
+    m_pos[0] += m_deltaX;
+    m_pos[1] += m_deltaY;
 }
