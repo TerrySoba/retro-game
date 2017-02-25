@@ -30,10 +30,12 @@ add_library(${PROJECT_NAME} SHARED
     src/mikmod_sound.h
     src/gfx_object.h
     src/actor.h
-    src/enemy_ship.h
-    src/enemy_ship.cpp
-    src/player_ship.h
-    src/player_ship.cpp
+    src/actors/enemy_ship.h
+    src/actors/enemy_ship.cpp
+    src/actors/player_ship.h
+    src/actors/player_ship.cpp
+    src/actors/bullet.h
+    src/actors/bullet.cpp
     src/input_listener.h
     src/engine_access.h
     src/gfx_engine.h

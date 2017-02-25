@@ -1,4 +1,4 @@
-#include "player_ship.h"
+#include "actors/player_ship.h"
 
 PlayerShip::PlayerShip(std::shared_ptr<Image> image, Eigen::Vector2i initialPos) :
     m_image(image),

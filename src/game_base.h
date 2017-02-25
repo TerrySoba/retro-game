@@ -2,8 +2,8 @@
 
 #include "image.h"
 #include "animation.h"
-#include "enemy_ship.h"
-#include "player_ship.h"
+#include "actors/enemy_ship.h"
+#include "actors/player_ship.h"
 #include "input_listener.h"
 #include "paint_surface.h"
 #include "gfx_engine.h"
