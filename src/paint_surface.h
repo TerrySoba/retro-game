@@ -6,6 +6,11 @@
 #include <cstdint>
 #include <vector>
 
+constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
+{
+    return b | (g << 8) | (r << 16);
+}
+
 class PaintSurface
 {
 public:

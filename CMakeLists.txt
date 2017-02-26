@@ -3,9 +3,8 @@ cmake_minimum_required(VERSION 3.1.3)
 project(RetroGame)
 set (CMAKE_CXX_STANDARD 11)
 
-
 find_package(PNG REQUIRED)
-
+find_package(Boost REQUIRED COMPONENTS filesystem system)
 
 add_custom_target(package_game_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
@@ -24,6 +23,7 @@ add_library(${PROJECT_NAME} SHARED
     src/rectangle.h
     src/rectangle.cpp
     src/animation.h
+    src/animation.cpp
     src/mikmod_driver/drv_retro_game.c
     src/mikmod_driver/drv_retro_game.h
     src/mikmod_sound.cpp
@@ -48,12 +48,14 @@ add_library(${PROJECT_NAME} SHARED
 
 INCLUDE_DIRECTORIES(
     ${PNG_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
     3rd_party
     src
     )
 
 target_link_libraries(${PROJECT_NAME}
     ${PNG_LIBRARIES}
+    ${Boost_LIBRARIES}
     mikmod
     )
 
@@ -63,7 +65,8 @@ add_executable(${PROJECT_NAME}_testsuite
     test/main.cpp
     test/rectangle_test.cpp
     test/png_image_test.cpp
-    test/mikmod_sound_test.cpp)
+    test/mikmod_sound_test.cpp
+    test/animation_test.cpp)
 
 # Run testsuite
 add_custom_target(run_tests

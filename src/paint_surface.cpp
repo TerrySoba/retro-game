@@ -19,11 +19,6 @@ void PaintSurface::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)
     m_framebuffer[x + y*m_width] = pixel;
 }
 
-constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
-{
-    return b | (g << 8) | (r << 16);
-}
-
 
 void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 {

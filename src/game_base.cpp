@@ -31,8 +31,7 @@ void GameBase::init()
 {
     m_image = std::make_shared<PngImage>("assets/images/red_ship.png");
     m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
-    m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/", 0, 250);
-
+    m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/*.png");
 
     auto enemy = std::make_shared<EnemyShip>(m_anim);
     enemy->setInitialPos(Eigen::Vector2i(50, 40));
