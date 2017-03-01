@@ -1,26 +1,27 @@
 #include "animation.h"
 
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
-#include <regex>
 #include <sstream>
 #include <map>
 
 std::string escapeRegex(const std::string& str)
 {
-    const std::regex esc("[.^$|()\\[\\]{}*+?\\\\]");
-    const std::string rep("\\&");
-    std::string result = std::regex_replace(str, esc, rep,
-                                       std::regex_constants::match_default | std::regex_constants::format_sed);
+    const boost::regex esc("([.^$|()\\[\\]{}*+?\\\\])");
+    const std::string rep("(?1\\\\$&)");
+    std::string result =
+            boost::regex_replace(str, esc, rep,
+                                 boost::regex_constants::match_default |
+                                 boost::format_all);
     return result;
 }
 
-
 std::string globToRegex(const std::string& str)
 {
-    const std::regex esc("\\\\\\*");
+    const boost::regex esc("\\\\\\*");
     const std::string rep("([0-9]+)");
-    std::string result = std::regex_replace(str, esc, rep);
+    std::string result = boost::regex_replace(str, esc, rep);
     return result;
 }
 
@@ -42,7 +43,7 @@ std::map<int, std::string> getAnimationFilenames(const std::string& globName)
     auto path = p.remove_filename();
 
     auto regexString = globToRegex(escapeRegex(filename.native()));
-    std::regex reg(regexString);
+    boost::regex reg(regexString);
 
     std::map<int, std::string> results;
 
@@ -53,11 +54,11 @@ std::map<int, std::string> getAnimationFilenames(const std::string& globName)
              it != boost::filesystem::directory_iterator();
              ++it)
         {
-            std::smatch result;
+            boost::smatch result;
             std::string f = it->path().filename().native();
 
             // check if file matches regular expression
-            if (std::regex_match(it->path().filename().native(), result, reg))
+            if (boost::regex_match(it->path().filename().native(), result, reg))
             {
                 std::string match = result.str(0);
                 std::string number = result.str(1);
