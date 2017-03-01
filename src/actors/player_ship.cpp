@@ -1,5 +1,9 @@
 #include "actors/player_ship.h"
 
+#include "gfx_engine.h"
+#include "bullet.h"
+#include "exception.h"
+
 PlayerShip::PlayerShip(std::shared_ptr<Image> image, Eigen::Vector2i initialPos) :
     m_image(image),
     m_pos(initialPos)
@@ -58,7 +62,24 @@ void PlayerShip::downReleased()
 
 void PlayerShip::buttonPressed()
 {
+    if (m_bullet)
+    {
+        auto bullet = std::dynamic_pointer_cast<Bullet>(m_bullet);
+        if (bullet)
+        {
+            auto boundingBox = getBoundingBox();
+            Eigen::Vector2f shipPosMiddle =
+                    boundingBox.getTopLeft().cast<float>() +
+                    Eigen::Vector2f(boundingBox.getWidth() / 2.0, 0);
 
+            auto bulletBoundingBox = m_bullet->getBoundingBox();
+
+            Eigen::Vector2f bulletCenterOffset(-bulletBoundingBox.getWidth() / 2.0,0);
+
+
+            bullet->setTrajectory(shipPosMiddle + bulletCenterOffset, {0,-5});
+        }
+    }
 }
 
 void PlayerShip::buttonReleased()
@@ -69,6 +90,15 @@ void PlayerShip::buttonReleased()
 Rectangle PlayerShip::getBoundingBox()
 {
     return Rectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
+}
+
+void PlayerShip::init(EngineAccess &engine)
+{
+    m_bullet = engine.getActorByName("Bullet");
+    if (!m_bullet)
+    {
+        throw Exception("Did not find actor named \"Bullet\".");
+    }
 }
 
 void PlayerShip::act(EngineAccess& engine)

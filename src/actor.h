@@ -13,6 +13,11 @@ class Actor : public GfxObject
 {
 public:
     /**
+     * Virtual destructor
+     */
+    virtual ~Actor() {}
+
+    /**
      * This method returns the bounding box of the Actor.
      *
      * Be aware that the bounding box may not be the same
@@ -24,15 +29,18 @@ public:
     virtual Rectangle getBoundingBox() = 0;
 
     /**
+     * This method is called when
+     * @param engine
+     */
+    virtual void init(EngineAccess& engine) = 0;
+
+    /**
      * Each time this method is called the actor may act.
      *
      * The idea is that the actor may change it's position,
      * bounding box or even it's image.
      */
     virtual void act(EngineAccess& engine) = 0;
-
-protected:
-
 
 };
 

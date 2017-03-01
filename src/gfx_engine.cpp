@@ -17,6 +17,14 @@ void GfxEngine::addActor(std::shared_ptr<Actor> actor, const std::string& name)
     m_actors[name] = actor;
 }
 
+void GfxEngine::start()
+{
+    for (auto& actor: m_actors)
+    {
+        actor.second->init(*this);
+    }
+}
+
 std::shared_ptr<Actor> GfxEngine::getActorByName(const std::string& name)
 {
     if (m_actors.count(name) > 0)

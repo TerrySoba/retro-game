@@ -5,6 +5,9 @@
 #include "mikmod_sound.h"
 #include "mikmod_driver/drv_retro_game.h"
 
+#include "actors/enemy_ship.h"
+#include "actors/player_ship.h"
+#include "actors/bullet.h"
 
 #include "fmt/format.h"
 #include "exception.h"
@@ -39,13 +42,16 @@ void GameBase::init()
 
     auto player = std::make_shared<PlayerShip>(m_image, Eigen::Vector2i(10, 10));
     m_engine->addActor(player, "ThePlayer");
-
     m_inputListeners.push_back(player);
+
+    auto bullet = std::make_shared<Bullet>();
+    m_engine->addActor(bullet, "Bullet");
 
     m_sound->playModule("assets/music/test_music.xm");
 
     m_sampleId = m_sound->loadSample("assets/sounds/Per-Reverb.wav");
 
+    m_engine->start();
 }
 
 void GameBase::deinit()

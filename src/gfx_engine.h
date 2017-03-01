@@ -23,6 +23,19 @@ public:
      */
     void addActor(std::shared_ptr<Actor> actor, const std::string& name);
 
+    /**
+     * This method should be called after all actors have been added to the engine.
+     * It causes the init() method of all the actors to be called.
+     */
+    void start();
+
+    /**
+     * This method draws all currently visible actors to the given PaintSurface.
+     *
+     * The method also clls the act() method of all actors.
+     *
+     * @param surface The PaintSurface to draw on.
+     */
     void draw(PaintSurface& surface);
 
     // EngineAccess interface

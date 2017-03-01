@@ -30,6 +30,7 @@ public:
     // Actor interface
 public:
     Rectangle getBoundingBox() override;
+    void init(EngineAccess& engine) override;
     void act(EngineAccess& engine) override;
 
 
@@ -40,6 +41,7 @@ private:
     int32_t m_deltaX = 0;
     int32_t m_deltaY = 0;
 
+    std::shared_ptr<Actor> m_bullet;
 };
 
 #endif // PLAYER_SHIP_H

@@ -21,6 +21,8 @@ public:
     // Actor interface
 public:
     Rectangle getBoundingBox() override;
+    void init(EngineAccess& engine) override;
+
     void act(EngineAccess& engine) override;
 
 

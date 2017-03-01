@@ -70,6 +70,8 @@ PngImage::PngImage(const std::string& filename)
     auto bitDepth = png_get_bit_depth(png_ptr, info_ptr);
 
     auto number_of_passes = png_set_interlace_handling(png_ptr);
+    (void)number_of_passes;
+
     png_read_update_info(png_ptr, info_ptr);
 
     auto bytesPerRow = png_get_rowbytes(png_ptr,info_ptr);
@@ -84,7 +86,7 @@ PngImage::PngImage(const std::string& filename)
     }
 
     std::vector<png_bytep> rowPointers(height);
-    for (int y = 0; y < height; ++y)
+    for (uint32_t y = 0; y < height; ++y)
     {
         rowPointers[y] = &imageData[bytesPerRow * y];
     }
@@ -106,9 +108,9 @@ PngImage::PngImage(const std::string& filename)
     size_t bytesPerPixel = (colorType & PNG_COLOR_MASK_ALPHA)?4:3;
 
     /// now convert to target image format XRGB
-    for (int y = 0; y < height; ++y)
+    for (uint32_t y = 0; y < height; ++y)
     {
-        for (int x = 0; x < width; ++x)
+        for (uint32_t x = 0; x < width; ++x)
         {
             auto r = imageData[y * bytesPerRow + (bytesPerPixel * x) + 0];
             auto g = imageData[y * bytesPerRow + (bytesPerPixel * x) + 1];
