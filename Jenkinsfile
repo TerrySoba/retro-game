@@ -6,6 +6,8 @@ pipeline {
             steps { 
                 sh 'cmake .'
 		sh 'make'
+		sh 'make doxygen'
+		archiveArtifacts allowEmptyArchive: true, artifacts: 'doxygen/**/*'
             }
         }
         stage('Test'){
