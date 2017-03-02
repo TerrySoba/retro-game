@@ -66,7 +66,7 @@ const void* GameBase::run(GameInput input)
 
     if (input.button)
     {
-        m_sound->playSample(m_sampleId);
+        // m_sound->playSample(m_sampleId);
     }
         //m_sound->togglePause();
 

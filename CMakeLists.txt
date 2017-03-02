@@ -75,7 +75,7 @@ add_executable(${PROJECT_NAME}_testsuite
 
 # Run testsuite
 add_custom_target(run_tests
-    COMMAND ${PROJECT_NAME}_testsuite -- --test-data-dir=${CMAKE_SOURCE_DIR}/test/test_data)
+    COMMAND ${PROJECT_NAME}_testsuite -r junit -o unit_test.xml -- --test-data-dir=${CMAKE_SOURCE_DIR}/test/test_data)
 
 
 target_link_libraries(${PROJECT_NAME}_testsuite
