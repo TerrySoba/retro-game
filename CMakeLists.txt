@@ -8,7 +8,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Werror")
 endif()
 
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
 find_package(Boost REQUIRED COMPONENTS filesystem system regex)
+find_package(Mikmod REQUIRED)
 
 add_custom_target(package_game_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
@@ -51,13 +55,14 @@ add_library(${PROJECT_NAME} SHARED
 
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
+    ${MIKMOD_INCLUDE_DIR}
     3rd_party
     src
     )
 
 target_link_libraries(${PROJECT_NAME}
     ${Boost_LIBRARIES}
-    mikmod
+    ${MIKMOD_LIBRARY}
     )
 
 add_executable(${PROJECT_NAME}_testsuite
