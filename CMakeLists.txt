@@ -8,14 +8,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Werror")
 endif()
 
-find_package(PNG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem system regex)
 
 add_custom_target(package_game_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
     )
-
-add_definitions(${PNG_DEFINITIONS})
 
 add_library(${PROJECT_NAME} SHARED
     src/libretro_interface.cpp
@@ -49,17 +46,16 @@ add_library(${PROJECT_NAME} SHARED
     src/paint_surface.cpp
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
-    3rd_party/libretro/libretro.h)
+    3rd_party/libretro/libretro.h
+    3rd_party/lodepng/lodepng.cpp)
 
 INCLUDE_DIRECTORIES(
-    ${PNG_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     3rd_party
     src
     )
 
 target_link_libraries(${PROJECT_NAME}
-    ${PNG_LIBRARIES}
     ${Boost_LIBRARIES}
     mikmod
     )
@@ -76,7 +72,6 @@ add_executable(${PROJECT_NAME}_testsuite
 # Run testsuite
 add_custom_target(run_tests
     COMMAND ${PROJECT_NAME}_testsuite -r junit -o unit_test.xml -- --test-data-dir=${CMAKE_SOURCE_DIR}/test/test_data)
-
 
 target_link_libraries(${PROJECT_NAME}_testsuite
     ${PROJECT_NAME})

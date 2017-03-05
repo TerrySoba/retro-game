@@ -17,7 +17,7 @@ public:
 
 public:
     // raw image data
-    std::vector<uint32_t> m_imageData;
+    std::vector<uint8_t> m_imageData;
 
     // dimensions of image in pixels
     uint32_t m_width;
