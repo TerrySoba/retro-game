@@ -4,7 +4,7 @@
 
 TEST_CASE("Rectangle constructor")
 {
-    Rectangle r(1, 2, 3, 4);
+    MyRectangle r(1, 2, 3, 4);
 
     REQUIRE(r.getWidth() == 3);
     REQUIRE(r.getHeight() == 4);
@@ -16,8 +16,8 @@ TEST_CASE("Rectangle constructor")
 
 TEST_CASE("Intersection is Commutative")
 {
-    Rectangle r1(0, 0, 100, 100);
-    Rectangle r2(-10, -20, 40, 40);
+    MyRectangle r1(0, 0, 100, 100);
+    MyRectangle r2(-10, -20, 40, 40);
 
     auto inter1 = r1.intersection(r2);
     auto inter2 = r2.intersection(r1);
@@ -29,12 +29,12 @@ TEST_CASE("Intersection is Commutative")
 
 TEST_CASE("Intersection tests")
 {
-    Rectangle r1(0, 0, 100, 100);
+    MyRectangle r1(0, 0, 100, 100);
 
 
     SECTION("r2 is top left of r1")
     {
-        Rectangle r2(-10, -20, 40, 40);
+        MyRectangle r2(-10, -20, 40, 40);
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 30);
         REQUIRE(inter.getHeight() == 20);
@@ -44,7 +44,7 @@ TEST_CASE("Intersection tests")
 
     SECTION("r2 is bottom left of r1, no intersection")
     {
-        Rectangle r2(-20, 110, 40, 40);
+        MyRectangle r2(-20, 110, 40, 40);
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 0);
         REQUIRE(inter.getHeight() == 0);
@@ -54,7 +54,7 @@ TEST_CASE("Intersection tests")
 
     SECTION("r2 is inside of r1")
     {
-        Rectangle r2(20, 30, 10, 20);
+        MyRectangle r2(20, 30, 10, 20);
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 10);
         REQUIRE(inter.getHeight() == 20);
@@ -64,7 +64,7 @@ TEST_CASE("Intersection tests")
 
     SECTION("r2 overlaps with bottom of r1")
     {
-        Rectangle r2(20, 30, 10, 200);
+        MyRectangle r2(20, 30, 10, 200);
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 10);
         REQUIRE(inter.getHeight() == 70);
@@ -74,7 +74,7 @@ TEST_CASE("Intersection tests")
 
     SECTION("r2 forms a cross with r1")
     {
-        Rectangle r2(-10, 10, 200, 10);
+        MyRectangle r2(-10, 10, 200, 10);
         auto inter = r1.intersection(r2);
         REQUIRE(inter.getWidth() == 100);
         REQUIRE(inter.getHeight() == 10);
@@ -86,7 +86,7 @@ TEST_CASE("Intersection tests")
 
 TEST_CASE("Check rectangle normalization")
 {
-    Rectangle r1(0, 0, -13, -17);
+    MyRectangle r1(0, 0, -13, -17);
     REQUIRE(r1.getWidth() == 13);
     REQUIRE(r1.getHeight() == 17);
     REQUIRE(r1.getTopLeft()[0] == -13);
@@ -95,8 +95,8 @@ TEST_CASE("Check rectangle normalization")
 
 TEST_CASE("equal rectangles")
 {
-    Rectangle r1(0, 0, 100, 100);
-    Rectangle r2(0, 0, 100, 100);
+    MyRectangle r1(0, 0, 100, 100);
+    MyRectangle r2(0, 0, 100, 100);
 
     auto inter = r1.intersection(r2);
 
@@ -107,16 +107,16 @@ TEST_CASE("equal rectangles")
 
 TEST_CASE("rectangle area")
 {
-    Rectangle r1(0, 0, 100, 100);
+    MyRectangle r1(0, 0, 100, 100);
     REQUIRE(r1.area() == 100*100);
 
-    Rectangle r2(0, 0, -100, 100);
+    MyRectangle r2(0, 0, -100, 100);
     REQUIRE(r2.area() == 100*100);
 
-    Rectangle r3(0, 0, 100, -100);
+    MyRectangle r3(0, 0, 100, -100);
     REQUIRE(r3.area() == 100*100);
 
-    Rectangle r4(0, 0, -100, -100);
+    MyRectangle r4(0, 0, -100, -100);
     REQUIRE(r4.area() == 100*100);
 }
 
