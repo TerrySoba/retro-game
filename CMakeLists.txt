@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.1.3)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "Debug")
+else()
+	message(FATAL_ERROR "CMAKE_BUILD_TYPE needs to be set to Release or Debug")
+endif()
+
 project(RetroGame)
 set (CMAKE_CXX_STANDARD 11)
 
@@ -11,8 +16,8 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Boost REQUIRED COMPONENTS filesystem system regex)
-find_package(Mikmod REQUIRED)
+include (mikmod.cmake)
+include (boost.cmake)
 include (GenerateExportHeader)
 
 add_custom_target(package_game_assets
