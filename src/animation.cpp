@@ -87,11 +87,13 @@ std::map<int, std::string> getAnimationFilenames(const std::string& globName)
              it != boost::filesystem::directory_iterator();
              ++it)
         {
+			
+
             boost::smatch result;
             std::string f = toString(it->path().filename());
 
             // check if file matches regular expression
-            if (boost::regex_match(toString(it->path().filename()), result, reg))
+            if (boost::regex_match(f, result, reg))
             {
                 std::string match = result[0];
                 std::string number = result[1];
