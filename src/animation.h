@@ -1,6 +1,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include "retrogame_export.h"
+
 #include "exception.h"
 #include "png_image.h"
 
@@ -11,9 +13,9 @@
 #include <map>
 #include <iostream>
 
-std::map<int, std::string> getAnimationFilenames(const std::string& filename);
+std::map<int, std::string> RETROGAME_EXPORT getAnimationFilenames(const std::string& filename);
 
-class Animation : public Image
+class RETROGAME_EXPORT Animation : public Image
 {
 public:
     Animation(const std::string& globName);

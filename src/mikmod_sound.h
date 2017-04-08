@@ -1,6 +1,8 @@
 #ifndef MIKMOD_SOUND_H
 #define MIKMOD_SOUND_H
 
+#include "retrogame_export.h"
+
 #include <cstdint>
 #include <cstdlib>
 
@@ -20,7 +22,7 @@ typedef size_t SampleId;
  * It can be used to play mod music and also to play
  * samples.
  */
-class MikmodSound
+class RETROGAME_EXPORT MikmodSound
 {
 public:
     /**

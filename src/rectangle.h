@@ -1,11 +1,13 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include "retrogame_export.h"
+
 #include "Eigen/Core"
 
 #include <cstdint>
 
-class MyRectangle
+class RETROGAME_EXPORT MyRectangle
 {
 public:
     /**

@@ -13,11 +13,20 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(Boost REQUIRED COMPONENTS filesystem system regex)
 find_package(Mikmod REQUIRED)
+include (GenerateExportHeader)
 
 add_custom_target(package_game_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
     )
 
+INCLUDE_DIRECTORIES(
+    ${Boost_INCLUDE_DIRS}
+    ${MIKMOD_INCLUDE_DIR}
+	${CMAKE_BINARY_DIR}
+    3rd_party
+    src
+    )
+	
 add_library(${PROJECT_NAME} SHARED
     src/libretro_interface.cpp
     src/game_base.cpp
@@ -53,12 +62,9 @@ add_library(${PROJECT_NAME} SHARED
     3rd_party/libretro/libretro.h
     3rd_party/lodepng/lodepng.cpp)
 
-INCLUDE_DIRECTORIES(
-    ${Boost_INCLUDE_DIRS}
-    ${MIKMOD_INCLUDE_DIR}
-    3rd_party
-    src
-    )
+GENERATE_EXPORT_HEADER(${PROJECT_NAME})
+	
+
 
 target_link_libraries(${PROJECT_NAME}
     ${Boost_LIBRARIES}

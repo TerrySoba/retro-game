@@ -1,12 +1,13 @@
 #ifndef PNG_IMAGE_H
 #define PNG_IMAGE_H
 
+#include "retrogame_export.h"
 #include "image.h"
 
 #include <string>
 #include <vector>
 
-class PngImage : public Image
+class RETROGAME_EXPORT PngImage : public Image
 {
 public:
     PngImage(const std::string& filename);
@@ -15,7 +16,7 @@ public:
     virtual uint32_t getWidth() override;
     virtual uint32_t getHeight() override;
 
-public:
+private:
     // raw image data
     std::vector<uint8_t> m_imageData;
 
