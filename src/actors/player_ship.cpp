@@ -87,9 +87,9 @@ void PlayerShip::buttonReleased()
 
 }
 
-Rectangle PlayerShip::getBoundingBox()
+MyRectangle PlayerShip::getBoundingBox()
 {
-    return Rectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
+    return MyRectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
 }
 
 void PlayerShip::init(EngineAccess &engine)

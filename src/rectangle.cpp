@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-Rectangle::Rectangle(int32_t x, int32_t y, int32_t width, int32_t height) :
+MyRectangle::MyRectangle(int32_t x, int32_t y, int32_t width, int32_t height) :
     m_x(x),
     m_y(y),
     m_width(width),
@@ -21,7 +21,7 @@ Rectangle::Rectangle(int32_t x, int32_t y, int32_t width, int32_t height) :
     }
 }
 
-Rectangle Rectangle::intersection(const Rectangle& other) const
+MyRectangle MyRectangle::intersection(const MyRectangle& other) const
 {
     auto x1 = m_x;
     auto y1 = m_y;
@@ -42,10 +42,10 @@ Rectangle Rectangle::intersection(const Rectangle& other) const
     // check if rectangles actually intersected
     if (x5 >= x6 || y5 >= y6)
     {
-        return Rectangle(0,0,0,0);
+        return MyRectangle(0,0,0,0);
     }
     else
     {
-        return Rectangle(x5, y5, x6 - x5, y6 - y5);
+        return MyRectangle(x5, y5, x6 - x5, y6 - y5);
     }
 }

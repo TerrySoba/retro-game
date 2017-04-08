@@ -155,7 +155,7 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
     info->geometry.base_height  = FRAMEBUFFER_HEIGHT;
     info->geometry.max_width    = FRAMEBUFFER_WIDTH;
     info->geometry.max_height   = FRAMEBUFFER_HEIGHT;
-    info->geometry.aspect_ratio = 4.0/3.0;
+    info->geometry.aspect_ratio = 4.0f/3.0f;
 
     environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixel_format);
 }

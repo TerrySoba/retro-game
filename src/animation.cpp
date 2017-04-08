@@ -5,6 +5,7 @@
 
 #include <sstream>
 #include <map>
+#include <codecvt>
 
 std::string escapeRegex(const std::string& str)
 {
@@ -35,6 +36,37 @@ int toInt(const std::string& str)
     return number;
 }
 
+
+
+
+
+std::wstring toWString(const std::string& str)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.from_bytes(str);
+}
+
+std::string toString(const std::wstring& wstr)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.to_bytes(wstr);
+}
+
+std::string toString(const std::string& str)
+{
+	return str;
+}
+
+std::string toString(const boost::filesystem::path& path)
+{
+	return toString(path.native());
+}
+
+
 std::map<int, std::string> getAnimationFilenames(const std::string& globName)
 {
     // split globName into path and filename
@@ -42,7 +74,7 @@ std::map<int, std::string> getAnimationFilenames(const std::string& globName)
     auto filename = p.filename();
     auto path = p.remove_filename();
 
-    auto regexString = globToRegex(escapeRegex(filename.native()));
+    auto regexString = globToRegex(escapeRegex(toString(filename)));
 
     boost::regex reg(regexString);
 
@@ -56,14 +88,14 @@ std::map<int, std::string> getAnimationFilenames(const std::string& globName)
              ++it)
         {
             boost::smatch result;
-            std::string f = it->path().filename().native();
+            std::string f = toString(it->path().filename());
 
             // check if file matches regular expression
-            if (boost::regex_match(it->path().filename().native(), result, reg))
+            if (boost::regex_match(toString(it->path().filename()), result, reg))
             {
                 std::string match = result[0];
                 std::string number = result[1];
-                auto matchedFile = std::string(path.native()) + "/" + f;
+                auto matchedFile = toString(path) + "/" + f;
                 results[toInt(number)] = matchedFile;
             }
         }

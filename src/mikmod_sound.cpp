@@ -5,7 +5,11 @@
 #include "fmt/format.h"
 
 #include <mikmod.h>
-#include <unistd.h>
+
+#ifdef __linux__
+	#include <unistd.h>
+#endif
+
 #include <string.h>
 
 #include <iostream>

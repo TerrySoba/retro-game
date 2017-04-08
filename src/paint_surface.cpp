@@ -43,10 +43,10 @@ void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 
 void PaintSurface::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTransparent)
 {
-    Rectangle screenRect(0, 0, m_width, m_height);
+    MyRectangle screenRect(0, 0, m_width, m_height);
 
     // check if image is visible at all
-    Rectangle imgRect(x, y, img.getWidth(), img.getHeight());
+    MyRectangle imgRect(x, y, img.getWidth(), img.getHeight());
     auto inter = screenRect.intersection(imgRect);
 
     // only draw img if it is visible
@@ -55,10 +55,13 @@ void PaintSurface::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTr
 
     if (visible)
     {
-        auto copyFunctor =
-                makePurpleTransparent ?
-                [](uint32_t* start, uint32_t* end, uint32_t* dest){ copyIgnorePurple(start, end, dest); } :
-                [](uint32_t* start, uint32_t* end, uint32_t* dest){ memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
+		std::function<void(uint32_t*, uint32_t*, uint32_t*)> copyFunctor;
+		if (makePurpleTransparent) {
+			copyFunctor = [](uint32_t* start, uint32_t* end, uint32_t* dest) { copyIgnorePurple(start, end, dest); };
+		} else {
+			copyFunctor = [](uint32_t* start, uint32_t* end, uint32_t* dest) { memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
+		}
+
 
         auto tl = inter.getTopLeft();
 

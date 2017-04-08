@@ -20,7 +20,7 @@ public:
 
     // Actor interface
 public:
-    Rectangle getBoundingBox() override;
+    MyRectangle getBoundingBox() override;
     void init(EngineAccess& engine) override;
 
     void act(EngineAccess& engine) override;

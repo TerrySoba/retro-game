@@ -36,10 +36,10 @@ std::shared_ptr<Image> EnemyShip::getImage()
     return m_image;
 }
 
-Rectangle EnemyShip::getBoundingBox()
+MyRectangle EnemyShip::getBoundingBox()
 {
     auto pos = getPos();
-    return Rectangle(pos[0], pos[1], m_image->getWidth(), m_image->getHeight());
+    return MyRectangle(pos[0], pos[1], m_image->getWidth(), m_image->getHeight());
 }
 
 void EnemyShip::init(EngineAccess &engine)

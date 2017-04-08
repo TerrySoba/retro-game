@@ -26,7 +26,7 @@ public:
      *
      * \sa getPos() \sa getImage()
      */
-    virtual Rectangle getBoundingBox() = 0;
+    virtual MyRectangle getBoundingBox() = 0;
 
     /**
      * This method is called when

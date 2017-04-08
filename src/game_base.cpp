@@ -19,7 +19,9 @@
 #include <algorithm>
 #include <iostream>
 
-#include <unistd.h>
+#ifdef __linux__
+	#include <unistd.h>
+#endif
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
     m_surface(new PaintSurface(frameWidth, frameHeight)),
@@ -76,7 +78,7 @@ const void* GameBase::run(GameInput input)
     if (input.right) m_posX++;
     if (input.down) m_posY++;
     if (input.up) m_posY--;
-    m_anim->setFrame(m_frameCounter);
+    m_anim->setFrame(static_cast<uint32_t>(m_frameCounter));
 
     ++m_frameCounter;
 

@@ -25,9 +25,9 @@ std::shared_ptr<Image> Bullet::getImage()
     return m_image;
 }
 
-Rectangle Bullet::getBoundingBox()
+MyRectangle Bullet::getBoundingBox()
 {
-    return Rectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
+    return MyRectangle(m_pos[0], m_pos[1], m_image->getWidth(), m_image->getHeight());
 }
 
 void Bullet::init(EngineAccess &engine)

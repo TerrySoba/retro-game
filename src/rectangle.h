@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-class Rectangle
+class MyRectangle
 {
 public:
     /**
@@ -16,7 +16,7 @@ public:
      * @param width width of rectangle
      * @param height height of rectangle
      */
-    Rectangle(int32_t x, int32_t y, int32_t width, int32_t height);
+    MyRectangle(int32_t x, int32_t y, int32_t width, int32_t height);
 
     int32_t getWidth() const
     {
@@ -38,7 +38,7 @@ public:
         return Eigen::Vector2i(m_x + m_width, m_y + m_height);
     }
 
-    Rectangle intersection(const Rectangle& other) const;
+    MyRectangle intersection(const MyRectangle& other) const;
 
     int32_t area()
     {
