@@ -5,7 +5,10 @@
 
 #include <sstream>
 #include <map>
+
+#ifdef _WIN32
 #include <codecvt>
+#endif
 
 std::string escapeRegex(const std::string& str)
 {
@@ -39,7 +42,7 @@ int toInt(const std::string& str)
 
 
 
-
+#ifdef _WIN32
 std::wstring toWString(const std::string& str)
 {
 	using convert_typeX = std::codecvt_utf8<wchar_t>;
@@ -55,6 +58,7 @@ std::string toString(const std::wstring& wstr)
 
 	return converterX.to_bytes(wstr);
 }
+#endif
 
 std::string toString(const std::string& str)
 {
