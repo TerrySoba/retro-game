@@ -13,7 +13,8 @@ std::vector<uint8_t> loadFromFile(const std::string& filePath)
     long fsize = ftell(f);
     fseek(f, 0, SEEK_SET);  //same as rewind(f);
     std::vector<uint8_t> data(fsize);
-    (void)fread(data.data(), fsize, 1, f);
+    auto bytesRead = fread(data.data(), fsize, 1, f);
+    data.resize(bytesRead);
     fclose(f);
     return data;
 }
