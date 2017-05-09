@@ -13,16 +13,21 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Werror")
 endif()
 
+set(USE_MIKMOD true CACHE BOOL "Use mikmod to play music and sounds.")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-include (mikmod.cmake)
+if (USE_MIKMOD)
+    include (mikmod.cmake)
+endif(USE_MIKMOD)
+
 include (boost.cmake)
 include (GenerateExportHeader)
 
 add_custom_target(package_game_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
     )
+
 
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
@@ -31,8 +36,27 @@ INCLUDE_DIRECTORIES(
     3rd_party
     src
     )
-	
-add_library(${PROJECT_NAME} SHARED
+
+
+set(${PROJECT_NAME}_SOURCES)
+if(USE_MIKMOD)
+    # If we use mikmod add sources
+    list(APPEND ${PROJECT_NAME}_SOURCES
+        src/mikmod_sound.cpp
+        src/mikmod_sound.h
+        src/mikmod_driver/drv_retro_game.c
+        src/mikmod_driver/drv_retro_game.h
+        )
+else (USE_MIKMOD)
+    # If mikmod is not used build dummy implementation
+    list(APPEND ${PROJECT_NAME}_SOURCES
+        src/mikmod_sound_dummy.cpp
+        src/mikmod_sound.h
+        )
+endif(USE_MIKMOD)
+
+
+list(APPEND ${PROJECT_NAME}_SOURCES
     src/libretro_interface.cpp
     src/game_base.cpp
     src/image.h
@@ -44,10 +68,6 @@ add_library(${PROJECT_NAME} SHARED
     src/rectangle.cpp
     src/animation.h
     src/animation.cpp
-    src/mikmod_driver/drv_retro_game.c
-    src/mikmod_driver/drv_retro_game.h
-    src/mikmod_sound.cpp
-    src/mikmod_sound.h
     src/gfx_object.h
     src/actor.h
     src/actors/enemy_ship.h
@@ -65,7 +85,13 @@ add_library(${PROJECT_NAME} SHARED
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h
-    3rd_party/lodepng/lodepng.cpp)
+    3rd_party/lodepng/lodepng.cpp
+    )
+
+
+add_library(${PROJECT_NAME} SHARED
+    ${${PROJECT_NAME}_SOURCES}
+    )
 
 GENERATE_EXPORT_HEADER(${PROJECT_NAME})
 	
