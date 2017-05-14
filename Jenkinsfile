@@ -13,7 +13,8 @@ pipeline {
         }
         stage('Test'){
             steps {
-                bat 'make run_tests'
+                bat 'C:\\msys64\\msys2_shell.cmd -mingw64 -here -c "make run_tests"'
+                // bat 'make run_tests'
                 // junit 'unit_test.xml'
             }
         }
