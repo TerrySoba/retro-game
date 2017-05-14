@@ -8,7 +8,7 @@ pipeline {
             steps {
                 // bat 'C:\\msys64\\msys2_shell.cmd -mingw64 -here -c "cmake . -DCMAKE_BUILD_TYPE=Release"'
                 sh 'cmake -G "MSYS Makefiles" . -DCMAKE_BUILD_TYPE=Release'
-                sh 'make'
+                sh 'make -j4'
                 // sh 'make doxygen'
                 // archiveArtifacts allowEmptyArchive: true, artifacts: 'doxygen/**/*'
             }
@@ -16,8 +16,8 @@ pipeline {
         stage('Test'){
             steps {
                 // bat 'C:\\msys64\\msys2_shell.cmd -mingw64 -here -c "make run_tests"'
-                bat 'sh run_tests'
-                // junit 'unit_test.xml'
+                sh 'make run_tests'
+                junit 'unit_test.xml'
             }
         }
     }
