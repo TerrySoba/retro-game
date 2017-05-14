@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Test'){
             steps {
-                // sh 'make run_tests'
+                bat 'make run_tests'
                 // junit 'unit_test.xml'
             }
         }
