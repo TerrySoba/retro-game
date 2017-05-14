@@ -1,19 +1,6 @@
 #include "mikmod_sound.h"
-#include "mikmod_driver/drv_retro_game.h"
-
-#include "exception.h"
-#include "fmt/format.h"
-
-#include <mikmod.h>
-
-#ifdef __linux__
-	#include <unistd.h>
-#endif
 
 #include <string.h>
-
-#include <iostream>
-
 
 MikmodSound::MikmodSound()
 {

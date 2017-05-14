@@ -4,16 +4,15 @@
 #include "exception.h"
 #include "fmt/format.h"
 
-#include <mikmod.h>
-
 #ifdef __linux__
 	#include <unistd.h>
 #endif
 
 #include <string.h>
 
-#include <iostream>
-
+extern "C" {
+#include <mikmod.h>
+}
 
 MikmodSound::MikmodSound()
 {
