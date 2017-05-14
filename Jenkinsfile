@@ -3,17 +3,18 @@ pipeline {
 
     stages {
         stage('Build') { 
-            steps { 
-                sh 'cmake .'
-		sh 'make'
-		sh 'make doxygen'
-		archiveArtifacts allowEmptyArchive: true, artifacts: 'doxygen/**/*'
+            steps {
+                bat 'C:\msys64\msys2_shell.cmd -mingw64 -here -c "cmake . -DCMAKE_BUILD_TYPE=Release"'
+                // bat 'cmake .'
+                // sh 'make'
+                // sh 'make doxygen'
+                // archiveArtifacts allowEmptyArchive: true, artifacts: 'doxygen/**/*'
             }
         }
         stage('Test'){
             steps {
-                sh 'make run_tests'
-                junit 'unit_test.xml'
+                // sh 'make run_tests'
+                // junit 'unit_test.xml'
             }
         }
     }

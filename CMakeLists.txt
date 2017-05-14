@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.1.3)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
-	message(FATAL_ERROR "CMAKE_BUILD_TYPE needs to be set to Release or Debug")
+        message("CMAKE_BUILD_TYPE should to be set to Release or Debug, assuming Release for now.")
+        set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 project(RetroGame)
