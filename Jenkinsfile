@@ -7,7 +7,7 @@ pipeline {
         stage('Build') { 
             steps {
                 // bat 'C:\\msys64\\msys2_shell.cmd -mingw64 -here -c "cmake . -DCMAKE_BUILD_TYPE=Release"'
-                sh 'cmake . -DCMAKE_BUILD_TYPE=Release'
+                sh 'cmake -G "MSYS Makefiles" . -DCMAKE_BUILD_TYPE=Release'
                 sh 'make'
                 // sh 'make doxygen'
                 // archiveArtifacts allowEmptyArchive: true, artifacts: 'doxygen/**/*'
