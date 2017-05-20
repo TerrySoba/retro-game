@@ -126,9 +126,20 @@ add_subdirectory(doxygen)
 
 
 if (WIN32)
-	add_custom_target(install_dependencies
-		COMMAND mkdir -p "${CMAKE_BINARY_DIR}/deps"
-		COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${CMAKE_BINARY_DIR}/deps" "/mingw64"
+	set(WINDOWS_PACKAGE_DIR "${CMAKE_BINARY_DIR}/windows_package")
+
+	add_custom_target(create_windows_zip
+		COMMAND mkdir -p "${WINDOWS_PACKAGE_DIR}"
+		COMMAND cp "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${WINDOWS_PACKAGE_DIR}"
+		COMMAND cp "${CMAKE_BINARY_DIR}/RetroGame_testsuite.exe" "${WINDOWS_PACKAGE_DIR}"
+		COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${WINDOWS_PACKAGE_DIR}/assets"
+		COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" ""${WINDOWS_PACKAGE_DIR}"" "/mingw64"
+		COMMAND ${CMAKE_COMMAND} -E tar "czf" ${CMAKE_BINARY_DIR}/retro-game.tar.gz ${WINDOWS_PACKAGE_DIR}
 		)
+		
+	add_dependencies(create_windows_zip
+		${PROJECT_NAME}
+		${PROJECT_NAME}_testsuite)
+		
 endif(WIN32)
 
