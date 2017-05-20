@@ -123,3 +123,12 @@ add_dependencies(${PROJECT_NAME}
     package_game_assets)
 
 add_subdirectory(doxygen)
+
+
+if (WIN32)
+	add_custom_target(install_dependencies
+		COMMAND mkdir -p "${CMAKE_BINARY_DIR}/deps"
+		COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${CMAKE_BINARY_DIR}/deps" "/mingw64"
+		)
+endif(WIN32)
+
