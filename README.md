@@ -18,6 +18,7 @@ cmake . && make
 ```
 Now the game should be built.
 
+For windows follow these instructions: [Building on Windows](win32_build.md)
 
 ##Running the Game
 To run the game you need to install [Retroarch](https://www.libretro.com/index.php/retroarch-2/).
