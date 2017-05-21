@@ -83,6 +83,12 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     src/gfx_engine.cpp
     src/paint_surface.h
     src/paint_surface.cpp
+    src/decode_utf8.h
+    src/decode_utf8.cpp
+    src/texture_font.h
+    src/texture_font.cpp
+    src/memory_image.h
+    src/memory_image.cpp
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h

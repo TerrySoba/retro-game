@@ -5,6 +5,7 @@
 #include "input_listener.h"
 #include "paint_surface.h"
 #include "gfx_engine.h"
+#include "texture_font.h"
 
 #include "boost/optional.hpp"
 
@@ -62,6 +63,8 @@ private:
     std::shared_ptr<Image> m_image;
     std::shared_ptr<Image> m_bgImage;
     std::shared_ptr<Animation> m_anim;
+
+    std::shared_ptr<TextureFont> m_font;
 
     int32_t m_posX = 100;
     int32_t m_posY = 100;

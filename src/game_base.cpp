@@ -37,6 +37,11 @@ void GameBase::init()
     m_image = std::make_shared<PngImage>("assets/images/red_ship.png");
     m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/*.png");
+    m_font = std::make_shared<TextureFont>();
+    m_font->load("assets/fonts/DejaVuSans-Bold-10px.ytf");
+
+
+    m_image = m_font->getImage();
 
     auto enemy = std::make_shared<EnemyShip>(m_anim);
     enemy->setInitialPos(Eigen::Vector2i(50, 40));
