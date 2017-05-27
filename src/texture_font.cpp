@@ -126,3 +126,10 @@ bool TextureFont::load(const std::string& path) {
 
     return true;
 }
+
+void TextureFont::renderToImage(PaintSurface& surface, int32_t x, int32_t y, const std::string& /*text*/)
+{
+    surface.drawImage(*m_image, 0,0,10000,10000, x, y);
+}
+
+

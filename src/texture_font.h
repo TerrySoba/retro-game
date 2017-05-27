@@ -8,6 +8,7 @@
 #ifndef TEXTUREFONT_H_
 #define TEXTUREFONT_H_
 
+#include "paint_surface.h"
 #include "image.h"
 
 #include <map>
@@ -38,6 +39,16 @@ public:
 
     bool hasCharacter(uint32_t unicode);
     CharacterInformation* getCharacter(uint32_t unicode);
+
+    /**
+     * Renders the given text to the given surface at the given position (x,y).
+     *
+     * @param surface The Surface to render to.
+     * @param x The x position of the text.
+     * @param y The y position of the text.
+     * @param text The utf8 encoded text.
+     */
+    void renderToImage(PaintSurface& surface, int32_t x, int32_t y, const std::string& text);
 
 private:
     std::map<uint32_t, CharacterInformation> characterMap;

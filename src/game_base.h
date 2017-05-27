@@ -54,6 +54,7 @@ private:
 
 private:
 
+    std::vector<uint32_t> m_framebuffer;
     std::shared_ptr<PaintSurface> m_surface;
 
     std::shared_ptr<GfxEngine> m_engine;

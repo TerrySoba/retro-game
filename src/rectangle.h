@@ -48,6 +48,11 @@ public:
         return m_width * m_height;
     }
 
+    bool empty()
+    {
+        return (m_width == 0 || m_height == 0);
+    }
+
 private:
     int32_t m_x;
     int32_t m_y;

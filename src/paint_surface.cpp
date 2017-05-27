@@ -5,10 +5,17 @@
 #include <cstring>
 #include <assert.h>
 
-PaintSurface::PaintSurface(uint32_t width, uint32_t height) :
+PaintSurface::PaintSurface(Image& img) :
+    m_framebuffer(img.getData()),
+    m_width(img.getWidth()),
+    m_height(img.getHeight())
+{
+}
+
+PaintSurface::PaintSurface(uint32_t* framebuffer, uint32_t width, uint32_t height) :
+    m_framebuffer(framebuffer),
     m_width(width),
-    m_height(height),
-    m_framebuffer(width * height)
+    m_height(height)
 {
 }
 
@@ -22,7 +29,6 @@ void PaintSurface::drawPixel(uint32_t x, uint32_t y, uint32_t pixel)
 
 void copyIgnorePurple(uint32_t* start, uint32_t* end, uint32_t* dest)
 {
-
     static const uint32_t purple = rgb(255,0,255);
 
     while (start != end)
@@ -86,3 +92,45 @@ void PaintSurface::drawImage(Image& img, int32_t x, int32_t y, bool makePurpleTr
         }
     }
 }
+
+
+void PaintSurface::drawImage(Image& sourceImg,
+               int32_t sourceX, int32_t sourceY, int32_t sourceWidth, int32_t sourceHeight,
+               int32_t targetX, int32_t targetY,
+               bool makePurpleTransparent)
+{
+    // calculations done in framebuffer coordinates
+    MyRectangle screenRect(0, 0, m_width, m_height);
+    MyRectangle sourceImageRect(targetX - sourceX, targetY - sourceY, sourceWidth, sourceHeight);
+    MyRectangle targetImageRect(targetX, targetY, sourceWidth, sourceHeight);
+    MyRectangle drawRect = screenRect.intersection(sourceImageRect.intersection(targetImageRect));
+
+
+    if (!drawRect.empty())
+    {
+
+        std::function<void(uint32_t*, uint32_t*, uint32_t*)> copyFunctor;
+        if (makePurpleTransparent) {
+            copyFunctor = [](uint32_t* start, uint32_t* end, uint32_t* dest) { copyIgnorePurple(start, end, dest); };
+        } else {
+            copyFunctor = [](uint32_t* start, uint32_t* end, uint32_t* dest) { memcpy(dest, start, (end - start) * sizeof(uint32_t)); };
+        }
+
+        auto xOffScreen = drawRect.getTopLeft()[0];
+        auto yOffScreen = drawRect.getTopLeft()[1];
+
+        auto xOffImg = sourceImg.getWidth() - drawRect.getWidth();
+        auto yOffImg = sourceImg.getHeight() - drawRect.getHeight();
+
+        auto imgData = sourceImg.getData();
+
+        for (int32_t line = 0; line < drawRect.getHeight(); ++line)
+        {
+            uint32_t* target = &m_framebuffer[(yOffScreen + line) * m_width + xOffScreen];
+            uint32_t* source = &imgData[sourceImg.getWidth() * (line + yOffImg) + xOffImg];
+
+            copyFunctor(source, source + drawRect.getWidth(), target);
+        }
+    }
+}
+

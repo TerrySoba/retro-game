@@ -24,7 +24,8 @@
 #endif
 
 GameBase::GameBase(uint32_t frameWidth, uint32_t frameHeight) :
-    m_surface(new PaintSurface(frameWidth, frameHeight)),
+    m_framebuffer(frameWidth * frameHeight),
+    m_surface(new PaintSurface(m_framebuffer.data(), frameWidth, frameHeight)),
     m_engine(new GfxEngine),
     m_sound(new MikmodSound),
     m_audioBuffer(735 * 4) // 44100 / 60 == 735 , one audio frame == 4 bytes
@@ -41,7 +42,11 @@ void GameBase::init()
     m_font->load("assets/fonts/DejaVuSans-Bold-10px.ytf");
 
 
-    m_image = m_font->getImage();
+    // m_image = m_font->getImage();
+
+    PaintSurface surface(*m_image);
+
+    m_font->renderToImage(surface, 0, 0, "MyText");
 
     auto enemy = std::make_shared<EnemyShip>(m_anim);
     enemy->setInitialPos(Eigen::Vector2i(50, 40));
