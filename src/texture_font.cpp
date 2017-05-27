@@ -125,6 +125,16 @@ bool TextureFont::load(const std::string& path) {
     // LOG("loaded texture of size ", width, "x", height);
     // LOG("found ", noOfCharacters, " characters.");
 
+    // make text transparent
+    auto data = m_image->getData();
+    for (size_t i = 0; i < m_image->getHeight() * m_image->getWidth(); ++i)
+    {
+        if (greenChannel(data[i]) < 50)
+        {
+            data[i] = rgb(255,0,255);
+        }
+    }
+
     return true;
 }
 
@@ -141,7 +151,7 @@ void TextureFont::renderToImage(PaintSurface& surface, int32_t x, int32_t y, con
         {
             CharacterInformation glyph = m_characterMap[ch];
             surface.drawImage(*m_image, glyph.imageLeft, glyph.imageTop, glyph.imageWidth, glyph.imageHeight,
-                              x + std::ceil(pos) + glyph.bearingLeft, y - glyph.bearingTop);
+                              x + std::ceil(pos) + glyph.bearingLeft, y - glyph.bearingTop, true);
             pos += glyph.horiAdvance;
         }
     }

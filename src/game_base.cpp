@@ -39,14 +39,15 @@ void GameBase::init()
     m_bgImage = std::make_shared<PngImage>("assets/images/space_bg.png");
     m_anim = std::make_shared<Animation>("assets/animations/space_ship_64x32/*.png");
     m_font = std::make_shared<TextureFont>();
-    m_font->load("assets/fonts/DejaVuSans-Bold-10px.ytf");
+    // m_font->load("assets/fonts/DejaVuSans-Bold-10px.ytf");
+    m_font->load("assets/fonts/Japanese-14px.ytf");
 
 
 //    m_image = m_font->getImage();
 
     PaintSurface surface(*m_bgImage);
 
-    m_font->renderToImage(surface, 20, 100, "Test text rendered to the backround layer.");
+    m_font->renderToImage(surface, 20, 100, u8"これはテストです。Test123äöü");
 
     auto enemy = std::make_shared<EnemyShip>(m_anim);
     enemy->setInitialPos(Eigen::Vector2i(50, 40));

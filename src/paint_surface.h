@@ -11,6 +11,11 @@ constexpr uint32_t rgb(uint8_t r, uint8_t g, uint8_t b)
     return b | (g << 8) | (r << 16);
 }
 
+constexpr uint8_t greenChannel(uint32_t color)
+{
+    return ((0xff << 8) & color) >> 8;
+}
+
 class PaintSurface
 {
 public:
