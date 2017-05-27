@@ -26,7 +26,7 @@ include (boost.cmake)
 include (GenerateExportHeader)
 
 add_custom_target(package_game_assets
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
+    COMMAND echo ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
     )
 
 

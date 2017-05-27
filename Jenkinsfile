@@ -20,12 +20,12 @@ pipeline {
                 junit 'unit_test.xml'
             }
         }
-        /*stage('Deploy') {
+        stage('Deploy') {
             steps {
                 sh 'make create_windows_zip'
                 archive 'retro-game.zip'
             }
-        }*/
+        }
     }
 }
 
