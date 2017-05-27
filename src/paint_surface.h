@@ -2,6 +2,7 @@
 #define PAINT_SURFACE_H
 
 #include "image.h"
+#include "retrogame_export.h"
 
 #include <cstdint>
 #include <vector>
@@ -16,7 +17,7 @@ constexpr uint8_t greenChannel(uint32_t color)
     return ((0xff << 8) & color) >> 8;
 }
 
-class PaintSurface
+class RETROGAME_EXPORT PaintSurface
 {
 public:
     PaintSurface(Image& img);
