@@ -25,15 +25,21 @@ endif(USE_MIKMOD)
 include (boost.cmake)
 include (GenerateExportHeader)
 
-add_custom_target(package_game_assets
-    COMMAND echo ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
-    )
 
+if (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+    add_custom_target(package_game_assets
+        COMMAND echo "In source build, so nothing to copy."
+        )
+else()
+    add_custom_target(package_game_assets
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
+        )
+endif()
 
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
     ${MIKMOD_INCLUDE_DIR}
-	${CMAKE_BINARY_DIR}
+    ${CMAKE_BINARY_DIR}
     3rd_party
     src
     )
