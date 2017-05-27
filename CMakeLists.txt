@@ -136,20 +136,20 @@ add_subdirectory(doxygen)
 
 
 if (WIN32)
-	set(WINDOWS_PACKAGE_DIR "${CMAKE_BINARY_DIR}/windows_package")
+    set(WINDOWS_PACKAGE_DIR "${CMAKE_BINARY_DIR}/windows_package")
 
-	add_custom_target(create_windows_zip
-		COMMAND mkdir -p "${WINDOWS_PACKAGE_DIR}"
-		COMMAND cp "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${WINDOWS_PACKAGE_DIR}"
-		COMMAND cp "${CMAKE_BINARY_DIR}/RetroGame_testsuite.exe" "${WINDOWS_PACKAGE_DIR}"
-		COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${WINDOWS_PACKAGE_DIR}/assets"
-		COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" ""${WINDOWS_PACKAGE_DIR}"" "/mingw64"
-		COMMAND ${CMAKE_COMMAND} -E tar "czf" ${CMAKE_BINARY_DIR}/retro-game.tar.gz ${WINDOWS_PACKAGE_DIR}
-		)
+    add_custom_target(create_windows_zip
+        COMMAND mkdir -p "${WINDOWS_PACKAGE_DIR}"
+        COMMAND cp "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${WINDOWS_PACKAGE_DIR}"
+        COMMAND cp "${CMAKE_BINARY_DIR}/RetroGame_testsuite.exe" "${WINDOWS_PACKAGE_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${WINDOWS_PACKAGE_DIR}/assets"
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" ""${WINDOWS_PACKAGE_DIR}"" "/mingw64"
+        COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${CMAKE_BINARY_DIR}/retro-game.zip --format=zip ${WINDOWS_PACKAGE_DIR}
+    )
 		
-	add_dependencies(create_windows_zip
-		${PROJECT_NAME}
-		${PROJECT_NAME}_testsuite)
+    add_dependencies(create_windows_zip
+        ${PROJECT_NAME}
+        ${PROJECT_NAME}_testsuite)
 		
 endif(WIN32)
 
