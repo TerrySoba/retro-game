@@ -143,10 +143,10 @@ if (WIN32)
         COMMAND cp "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${WINDOWS_PACKAGE_DIR}"
         COMMAND cp "${CMAKE_BINARY_DIR}/RetroGame_testsuite.exe" "${WINDOWS_PACKAGE_DIR}"
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${WINDOWS_PACKAGE_DIR}/assets"
-        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" ""${WINDOWS_PACKAGE_DIR}"" "/mingw64"
-        COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${CMAKE_BINARY_DIR}/retro-game.zip --format=zip ${WINDOWS_PACKAGE_DIR}
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/copy_dependencies.sh" "${CMAKE_BINARY_DIR}/libRetroGame.dll" "${WINDOWS_PACKAGE_DIR}" "/mingw64"
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" ${CMAKE_BINARY_DIR}/retro-game.zip --format=zip ${WINDOWS_PACKAGE_DIR}
     )
-		
+
     add_dependencies(create_windows_zip
         ${PROJECT_NAME}
         ${PROJECT_NAME}_testsuite)
