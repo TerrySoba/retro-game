@@ -51,7 +51,7 @@ public:
     void renderToImage(PaintSurface& surface, int32_t x, int32_t y, const std::string& text);
 
 private:
-    std::map<uint32_t, CharacterInformation> characterMap;
+    std::map<uint32_t, CharacterInformation> m_characterMap;
     std::shared_ptr<Image> m_image;
 };
 

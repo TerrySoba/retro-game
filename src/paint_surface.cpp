@@ -1,7 +1,9 @@
 #include "paint_surface.h"
 
 #include "rectangle.h"
+#include "exception.h"
 
+#include "fmt/format.h"
 #include <cstring>
 #include <assert.h>
 
@@ -101,10 +103,14 @@ void PaintSurface::drawImage(Image& sourceImg,
 {
     // calculations done in framebuffer coordinates
     MyRectangle screenRect(0, 0, m_width, m_height);
-    MyRectangle sourceImageRect(targetX - sourceX, targetY - sourceY, sourceWidth, sourceHeight);
+    MyRectangle sourceImageRect(targetX - sourceX, targetY - sourceY, sourceImg.getWidth(), sourceImg.getHeight());
     MyRectangle targetImageRect(targetX, targetY, sourceWidth, sourceHeight);
     MyRectangle drawRect = screenRect.intersection(sourceImageRect.intersection(targetImageRect));
 
+//    LOG(fmt::format("screen x:{} y:{} w:{} h:{}", screenRect.getTopLeft()[0], screenRect.getTopLeft()[1], screenRect.getWidth(), screenRect.getHeight()));
+//    LOG(fmt::format("src x:{} y:{} w:{} h:{}", sourceImageRect.getTopLeft()[0], sourceImageRect.getTopLeft()[1], sourceImageRect.getWidth(), sourceImageRect.getHeight()));
+//    LOG(fmt::format("targetImageRect x:{} y:{} w:{} h:{}", targetImageRect.getTopLeft()[0], targetImageRect.getTopLeft()[1], targetImageRect.getWidth(), targetImageRect.getHeight()));
+//    LOG(fmt::format("drawRect x:{} y:{} w:{} h:{}", drawRect.getTopLeft()[0], drawRect.getTopLeft()[1], drawRect.getWidth(), drawRect.getHeight()));
 
     if (!drawRect.empty())
     {
@@ -119,8 +125,8 @@ void PaintSurface::drawImage(Image& sourceImg,
         auto xOffScreen = drawRect.getTopLeft()[0];
         auto yOffScreen = drawRect.getTopLeft()[1];
 
-        auto xOffImg = sourceImg.getWidth() - drawRect.getWidth();
-        auto yOffImg = sourceImg.getHeight() - drawRect.getHeight();
+        auto xOffImg = sourceX + sourceWidth - drawRect.getWidth();
+        auto yOffImg = sourceY + sourceHeight - drawRect.getHeight();
 
         auto imgData = sourceImg.getData();
 

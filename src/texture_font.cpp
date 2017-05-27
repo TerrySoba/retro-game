@@ -10,6 +10,7 @@
 #include "memory_image.h"
 
 #include "fmt/format.h"
+#include "decode_utf8.h"
 
 #include <cstring>
 #include <stdint.h>
@@ -32,12 +33,12 @@ TextureFont::~TextureFont() {
 }
 
 bool TextureFont::hasCharacter(uint32_t unicode) {
-    return (characterMap.count(unicode) >= 1);
+    return (m_characterMap.count(unicode) >= 1);
 }
 
 CharacterInformation* TextureFont::getCharacter(uint32_t unicode) {
     if (hasCharacter(unicode)) {
-        return &characterMap[unicode];
+        return &m_characterMap[unicode];
     } else {
         return NULL;
     }
@@ -116,7 +117,7 @@ bool TextureFont::load(const std::string& path) {
         checked_fread(&info.imageWidth, sizeof(uint32_t), 1, fp);
         checked_fread(&info.imageHeight, sizeof(uint32_t), 1, fp);
 
-        characterMap.insert(std::make_pair(info.unicode, info));
+        m_characterMap.insert(std::make_pair(info.unicode, info));
     }
 
     // now log some debug information
@@ -127,9 +128,24 @@ bool TextureFont::load(const std::string& path) {
     return true;
 }
 
-void TextureFont::renderToImage(PaintSurface& surface, int32_t x, int32_t y, const std::string& /*text*/)
+
+void TextureFont::renderToImage(PaintSurface& surface, int32_t x, int32_t y, const std::string& text)
 {
-    surface.drawImage(*m_image, 0,0,10000,10000, x, y);
+    uint32_t pos = 0;
+
+    auto data = decodeUtf8(text);
+
+    for (auto ch: data)
+    {
+        if (m_characterMap.count(ch) > 0)
+        {
+            CharacterInformation glyph = m_characterMap[ch];
+            surface.drawImage(*m_image, glyph.imageLeft, glyph.imageTop, glyph.imageWidth, glyph.imageHeight,
+                              x + std::ceil(pos) + glyph.bearingLeft, y - glyph.bearingTop);
+            pos += glyph.horiAdvance;
+        }
+    }
+
 }
 
 
