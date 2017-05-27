@@ -133,4 +133,3 @@ void PaintSurface::drawImage(Image& sourceImg,
         }
     }
 }
-

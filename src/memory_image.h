@@ -11,8 +11,9 @@ class RETROGAME_EXPORT MemoryImage : public Image
 public:
     MemoryImage(uint32_t width, uint32_t height);
     virtual uint32_t* getData() override;
-    virtual uint32_t getWidth() override;
-    virtual uint32_t getHeight() override;
+    virtual const uint32_t* getData() const override;
+    virtual uint32_t getWidth() const override;
+    virtual uint32_t getHeight() const override;
 
 public:
     uint32_t m_width;

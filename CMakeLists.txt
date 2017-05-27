@@ -89,6 +89,8 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     src/texture_font.cpp
     src/memory_image.h
     src/memory_image.cpp
+    src/compare_image.h
+    src/compare_image.cpp
     3rd_party/fmt/format.cc
     3rd_party/fmt/format.h
     3rd_party/libretro/libretro.h
@@ -116,7 +118,9 @@ add_executable(${PROJECT_NAME}_testsuite
     test/rectangle_test.cpp
     test/png_image_test.cpp
     test/mikmod_sound_test.cpp
-    test/animation_test.cpp)
+    test/animation_test.cpp
+    test/compare_image_test.cpp
+    test/paint_surface_test.cpp)
 
 # Run testsuite
 add_custom_target(run_tests

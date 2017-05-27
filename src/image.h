@@ -16,8 +16,9 @@ class Image
 {
 public:
     virtual uint32_t* getData() = 0;
-    virtual uint32_t getWidth() = 0;
-    virtual uint32_t getHeight() = 0;
+    virtual const uint32_t* getData() const = 0;
+    virtual uint32_t getWidth() const = 0;
+    virtual uint32_t getHeight() const = 0;
 };
 
 

@@ -13,8 +13,9 @@ public:
     PngImage(const std::string& filename);
 
     virtual uint32_t* getData() override;
-    virtual uint32_t getWidth() override;
-    virtual uint32_t getHeight() override;
+    virtual const uint32_t* getData() const override;
+    virtual uint32_t getWidth() const override;
+    virtual uint32_t getHeight() const override;
 
 private:
     // raw image data

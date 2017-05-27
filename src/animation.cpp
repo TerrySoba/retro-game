@@ -135,12 +135,17 @@ uint32_t* Animation::getData()
     return m_images[m_currentFrame % m_images.size()].getData();
 }
 
-uint32_t Animation::getWidth()
+const uint32_t* Animation::getData() const
+{
+    return m_images[m_currentFrame % m_images.size()].getData();
+}
+
+uint32_t Animation::getWidth() const
 {
     return m_images[m_currentFrame % m_images.size()].getWidth();
 }
 
-uint32_t Animation::getHeight()
+uint32_t Animation::getHeight() const
 {
     return m_images[m_currentFrame % m_images.size()].getHeight();
 }

@@ -48,12 +48,17 @@ uint32_t* PngImage::getData()
     return reinterpret_cast<uint32_t*>(m_imageData.data());
 }
 
-uint32_t PngImage::getWidth()
+const uint32_t* PngImage::getData() const
+{
+    return reinterpret_cast<const uint32_t*>(m_imageData.data());
+}
+
+uint32_t PngImage::getWidth() const
 {
     return m_width;
 }
 
-uint32_t PngImage::getHeight()
+uint32_t PngImage::getHeight() const
 {
     return m_height;
 }

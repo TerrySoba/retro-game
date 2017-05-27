@@ -12,12 +12,17 @@ uint32_t* MemoryImage::getData()
     return m_data.data();
 }
 
-uint32_t MemoryImage::getWidth()
+const uint32_t* MemoryImage::getData() const
+{
+    return m_data.data();
+}
+
+uint32_t MemoryImage::getWidth() const
 {
     return m_width;
 }
 
-uint32_t MemoryImage::getHeight()
+uint32_t MemoryImage::getHeight() const
 {
     return m_height;
 }
