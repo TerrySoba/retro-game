@@ -1,7 +1,8 @@
+#include "exception.h"
+
 #include "mikmod_sound.h"
 #include "mikmod_driver/drv_retro_game.h"
 
-#include "exception.h"
 #include "fmt/format.h"
 
 #ifdef __linux__
